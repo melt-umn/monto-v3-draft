@@ -59,12 +59,12 @@ compiler with various editors, without the compiler developer needing to
 implement language support for each editor. Unfortunately, the native APIs
 of various popular editors vary widely with respect to how well they
 support the features required by Monto, namely the ability to bind to ØMQ
-([\[ZEROMQ\]](#zeromq)) and the ability to perform actions with an
-extremely high degree of asynchronicity.
+([\[ZEROMQ\]](#zeromq)) and the relatively large amount of client-side
+"bookkeeping" to be done.
 
 This document suggests changes to the Monto Protocols which are focused on
-removing the ZeroMQ requirement and lessening the requirement for
-asynchronous processing of events. As these changes are not backwards
+removing the ZeroMQ requirement and simplifying the protocol that the client
+has to support as much as possible. As these changes are not backwards
 compatible with existing Clients and Services, these changes are
 collectively known as Monto Version 3.
 
