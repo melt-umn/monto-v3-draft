@@ -148,6 +148,9 @@ The Broker SHALL then acquire the appropriate Products, and respond with
 an HTTP Status of 200 and a [`BrokerResponse`](#423-brokerresponse)
 Message as the body.
 
+TODO Document failure case, including request for files, cursor position, etc.
+from client.
+
 ## 3.2. The Service Protocol
 
 The Service Protocol dictates communication between Brokers and Services.
@@ -194,7 +197,6 @@ a [`ServiceDependency`](#432-servicedependency) Message and an HTTP Status
 of 400. If the Service encountered another error (for example, a syntax
 error when requesting an outline), it SHALL respond with an HTTP status of
 500 and a [`ServiceError`](#433-serviceerror) Message. If the requested
-
 Product was successfully created, it SHALL be returned directly (i.e.
 encoded as itself in JSON) with an HTTP status of 200.
 
