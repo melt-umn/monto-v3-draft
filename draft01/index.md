@@ -135,6 +135,8 @@ To perform Service discovery, the Client SHALL make a GET request to the
 200 and a [`BrokerServiceList`](#422-brokerservicelist) Message,
 corresponding to the Services connected to the Broker.
 
+TODO Create and document config format
+
 ### 3.1.4. Requesting Products
 
 A Client SHALL request Products by making a POST request to the
