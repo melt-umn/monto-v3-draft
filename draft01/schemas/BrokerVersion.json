@@ -1,6 +1,6 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"title": "ClientVersion",
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "BrokerVersion",
 	"type": "object",
 	"properties": {
 		"monto": {

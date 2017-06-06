@@ -1,5 +1,5 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
+	"$schema": "http://json-schema.org/draft-06/schema#",
 	"title": "BrokerServiceList",
 	"type": "array",
 	"items": { "$ref": "#/definitions/brokerService" },
@@ -17,13 +17,16 @@
 				"config": {
 					"type": "object",
 					"patternProperties": {
-						".+": { "$ref": "http://json-schema.org/draft-04/schema#" }
+						".+": { "$ref": "#/definitions/config" }
 					},
 					"additionalProperties": false
 				}
 			},
 			"required": ["id", "name", "products", "config"],
 			"additionalProperties": false
+		},
+		"config": {
+			// TODO
 		},
 		"productName": {
 			"type": "string",
