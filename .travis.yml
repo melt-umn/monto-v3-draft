@@ -8,7 +8,7 @@ addons:
       - python-pygments
 
 install: go get -u -v github.com/gohugoio/hugo
-script: hugo --theme=rfc
+script: hugo
 
 deploy:
   provider: pages
