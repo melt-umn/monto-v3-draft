@@ -1,12 +1,12 @@
-language: go
-go: stable
-
 addons:
   apt:
     packages:
      - python-pygments
 
-install: go get -u -v github.com/gohugoio/hugo
+# TODO Update after https://github.com/travis-ci/gimme/issues/93 is resolved.
+install:
+ - eval "$(gimme 1.8.3)"
+ - go get -u -v github.com/gohugoio/hugo
 script: hugo -v
 
 deploy:
