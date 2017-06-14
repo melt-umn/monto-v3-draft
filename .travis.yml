@@ -1,9 +1,7 @@
-go:
- - 1.8
-
 addons:
   apt:
     packages:
+     - golang-go
      - python-pygments
 
 install: go get -u -v github.com/gohugoio/hugo
