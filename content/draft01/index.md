@@ -244,7 +244,7 @@ Wright, A., Ed., and H. Andrews, Ed., "JSON Schema: A Media Type for Describing 
 "mitmproxy - home", [https://mitmproxy.org/](https://mitmproxy.org/).
 {{< /ref-citation >}}
 
-{{< ref-citation mitmproxy >}}
+{{< ref-citation monto >}}
 Keidel, S., Pfeiffer, W., and S. Erdweg., "The IDE Portability Problem and Its Solution in Monto", [doi:10.1145/2997364.2997368](http://dx.doi.org/10.1145/2997364.2997368), November 2016.
 {{< /ref-citation >}}
 
