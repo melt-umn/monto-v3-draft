@@ -1,11 +1,10 @@
-language: go
 go:
  - 1.8
 
 addons:
   apt:
     packages:
-      - python-pygments
+     - python-pygments
 
 install: go get -u -v github.com/gohugoio/hugo
 script: hugo
@@ -16,3 +15,4 @@ deploy:
   on:
     branch: master
   provider: pages
+  skip_cleanup: true
