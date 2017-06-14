@@ -1,0 +1,17 @@
+language: go
+go:
+ - 1.8
+
+addons:
+  apt:
+    packages:
+      - python-pygments
+
+install: go get -u -v github.com/gohugoio/hugo
+script: hugo --theme=rfc
+
+deploy:
+  provider: pages
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master

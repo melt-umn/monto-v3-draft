@@ -1,0 +1,21 @@
+{
+	"path": "/home/example/foo/bar.c",
+	"request": [
+		{
+			"service": "com.example.quux",
+			"product": "highlighting"
+		},
+		{
+			"service": "com.example.quux",
+			"product": "outline"
+		},
+		{
+			"service": "com.example.xyzzy",
+			"product": "errors"
+		},
+		{
+			"service": "com.example.spam",
+			"product": "com.example.spam/eggs"
+		}
+	]
+}

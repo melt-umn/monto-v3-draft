@@ -1,3 +1,7 @@
++++
+title = "Differences"
++++
+
 The Monto Version 3 protocol differs from Version 2 in several ways.
 
 # HTTP/2 instead of ZeroMQ

@@ -1,0 +1,26 @@
+[
+	{
+		"id": "com.example.quux",
+		"name": "Quux as a Service",
+		"vendor": "Example Vendor",
+		"products": [
+			"highlighting",
+			"outline"
+		],
+		"config": {
+			"type": "object",
+			"properties": {
+				"Debugging Symbols": { "type": "boolean" },
+				"Include Path": {
+					"type": "array",
+					"items": { "type": "string" }
+				},
+				"Optimization Level": {
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 3
+				}
+			}
+		}
+	}
+]

@@ -1,0 +1,14 @@
+{
+	"monto": {
+		"major": 3,
+		"minor": 0,
+		"patch": 0
+	},
+	"broker": {
+		"name": "Foo Broker",
+		"vendor": "ACME Inc.",
+		"major": 0,
+		"minor": 1,
+		"patch": 0
+	}
+}
