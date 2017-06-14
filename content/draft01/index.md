@@ -20,16 +20,13 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 Other terms used in this specification are as follows.
 
 Client
-: An IDE, text editor, or other software directly controlled by the end
-user.
+: An IDE, text editor, or other software directly controlled by the end user.
 
 Broker
-: A per-user piece of software that manages communication between Clients
-and Services.
+: A per-user piece of software that manages communication between Clients and Services.
 
 Service
-: A piece of software that receives Products from a Broker, and uses them
-to produce other Products in response.
+: A piece of software that receives Products from a Broker, and uses them to produce other Products in response.
 
 Message
 : A single JSON value sent as an HTTP request or response.
