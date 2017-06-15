@@ -57,51 +57,73 @@ Both the Client Protocol and Service Protocol are versioned according to Semanti
 
 Unless specified otherwise, a Message is serialized as JSON and sent with a Content-Type of `application/json`.
 
-## 3.1. The Client Protocol
+## 3.1. Common Messages
+
+These Messages are shared by both the Client Protocol and the Service Protocol.
+
+Messages are documented with JSON Schema {{% ref jsonschema %}}.
+
+The schemas are also present in the "schemas" directory, which should accompany this document.
+
+{{% draft01-message 3 1 1 Identifier %}}
+{{% draft01-message 3 1 1 MontoVersion %}}
+{{% draft01-message 3 1 1 NamespacedName %}}
+{{% draft01-message 3 1 1 Product %}}
+{{% draft01-message 3 1 1 ProductName %}}
+
+# 4. The Client Protocol
 
 The Client Protocol dictates communication between Clients and Brokers.
 
-### 3.1.1. Connection Initiation
+## 4.1. Connection Initiation
 
 A Client SHALL initiate a connection to a Broker either when it starts, or when Monto capabilities are requested. Although Monto can operate over connections on any port, Clients SHOULD default to connecting to port 28888 on the current machine, and Brokers SHOULD default to serving on that port. Clients and Brokers SHOULD be able to connect to and serve on other ports, if configured to do so.
 
-Upon initiating a connection to a Broker, a Client MUST attempt to use an HTTP/2 connection if the Client supports HTTP/2. If the Client does not, it SHALL use the same protocol, but over HTTP/1.1 instead. If a Client is using HTTP/1.1, it MAY open multiple connections to the server in order to have multiple requests "in flight" at the same time.
+Upon initiating a connection to a Broker, a Client MUST attempt to use an HTTP/2 connection if the Client supports HTTP/2. If the Client does not, it SHALL use the same protocol, but over HTTP/1.1 {{% ref rfc7230 %}} instead. If a Client is using HTTP/1.1, it MAY open multiple connections to the server in order to have multiple requests "in flight" at the same time.
 
-### 3.1.2. Version Negotiation
+## 4.2. Version Negotiation
 
-After the HTTP connection is established, the Client SHALL make a POST request to the `/monto/version` path, with a [`ClientVersion`](#411-clientversion) Message as the body. The Broker SHALL check that it is compatible with the Client. The Broker SHALL respond with a [`BrokerVersion`](#421-brokerversion) Message. If the Broker is compatible with the Client, this response SHALL have an HTTP Status of 200. If the Broker and Client are not compatible, the response SHALL instead have an HTTP Status of 409.
+After the HTTP connection is established, the Client SHALL make a POST request to the `/monto/version` path, with a [`ClientNegotiation`](#4-5-1-clientnegotiation) Message as the body. The Broker SHALL check that it is compatible with the Client. The Broker SHALL respond with a [`ClientBrokerNegotiation`](#4-5-2-clientbrokernegotiation) Message. If the Broker is compatible with the Client, this response SHALL have an HTTP Status of 200. If the Broker and Client are not compatible, the response SHALL instead have an HTTP Status of 409.
 
 If the HTTP Status is 200, the Client SHALL check that it is compatible with the Broker. If the HTTP Status is not 200 or the Client and Broker are not compatible as determined by the Client, the Client SHOULD inform the user and MUST close the connection.
 
 Compatibility between versions of the Client Protocol SHALL be determined using the Semantic Versioning rules. Additionally, a Client MAY reject a Broker that is known to not follow this specification correctly, and vice versa.
 
-### 3.1.3. Service Discovery
+If the intersection of the `extensions` field of the `ClientNegotiation` and `ClientBrokerNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker. The semantics of an extension being enabled are left to that extension. All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-6-client-protocol-extensions) section below.
+ 
+## 4.3. Requesting Products
 
-To perform Service discovery, the Client SHALL make a GET request to the `/monto/services` path. The Broker SHALL respond with an HTTP Status of 200 and a [`BrokerServiceList`](#422-brokerservicelist) Message, corresponding to the Services connected to the Broker.
+A Client SHALL request Products by making a POST request to the `/monto/products` path, with a [`ClientRequest`](#4-5-3-clientrequest) Message as the body.
 
-TODO Create and document config format
+If the `ClientRequest` Message contains requests for Products which a Service does not expose, or a request for Products from a Service that does not exist, the Broker SHALL respond with an HTTP Status of 400 and the [`ClientSingleRequest`](#4-5-4-clientsinglerequest) Message corresponding to the illegal request as the body.
 
-### 3.1.4. Requesting Products
+Otherwise, the Broker SHALL respond with an HTTP Status of 200 and a [`BrokerResponse`](#4-5-5-brokerresponse) Message as the body. Each member of the `BrokerResponse` Message corresponds to one of the requests from the `ClientRequest` Message. No particular order is enforced; a Client MUST be able to handle a `BrokerResponse` Message whose elements have a different order from the requests in the `ClientRequest` Message.
 
-A Client SHALL request Products by making a POST request to the `/monto/products` path, with a [`ClientRequest`](#412-clientrequest) Message as the body.
+When a Service responds to the Broker with a Product, the [`ServiceProduct`](TODO) alternative MUST be present in the `BrokerResponse`. When a Service responds to the Broker with an error, the [`ServiceError`](TODO) alternative MUST be present instead.
 
-For the purposes of dependency resolution, the "source" field of the `ClientRequest` is a "source" product.
+## 4.5. Client Protocol Messages
 
-The Broker SHALL then acquire the appropriate Products, and respond with an HTTP Status of 200 and a [`BrokerResponse`](#423-brokerresponse) Message as the body.
+{{% draft01-message 4 5 1 ClientNegotiation %}}
+{{% draft01-message 4 5 2 ClientBrokerNegotiation %}}
+{{% draft01-message 4 5 3 ClientRequest %}}
+{{% draft01-message 4 5 4 ClientSingleRequest %}}
+{{% draft01-message 4 5 5 BrokerResponse %}}
 
-TODO Document failure case, including request for files, cursor position, etc. from client.
+## 4.6. Client Protocol Extensions
 
-## 3.2. The Service Protocol
+Once extensions have been thought through, documented, and have a reference implementation, they can be submitted to become un-namespaced, and will appear in this section.
+
+# 5. The Service Protocol
 
 The Service Protocol dictates communication between Brokers and Services.
 
-### 3.2.1. Connection Initiation
+## 5.1. Connection Initiation
 
 A Broker SHALL initiate a connection to the Services requested by the user when it starts. Brokers MUST be able to connect to a Service on any port, and Services MUST be able to serve on any port.
 
 Brokers MUST first attempt to use HTTP/2, and MAY support HTTP/1.1 as well. Services SHOULD support HTTP/2 if at all possible, as the pipelining it allows is more useful than for the Client Protocol, as it is more likely that there are several in-flight requests at once.
 
-### 3.2.2. Version Negotiation
+## 5.2. Version Negotiation
 
 After the HTTP connection is established, the Broker SHALL make a POST request to the `/monto/version` path, with a [`BrokerVersion`](#421-brokerversion) Message as the body. The Service SHALL check that it is compatible with the Broker. The Service SHALL respond with a [`ServiceVersion`](#431-serviceversion) Message. If the Service is compatible with the Broker, this response SHALL have an HTTP Status of 200. If the Service and Broker are not compatible, the response SHALL instead have an HTTP Status of 409.
 
@@ -109,129 +131,60 @@ If the HTTP Status is 200, the Broker SHALL check that it is compatible with the
 
 Compatibility between versions of the Service Protocol SHALL be determined using the Semantic Versioning rules. Additionally, a Broker MAY reject a Service that is known to not follow this specification correctly, and vice versa.
 
-### 3.2.3. Requesting Products
+## 5.3. Requesting Products
 
 To request Products, the Broker SHALL send a [`BrokerRequest`](#424-brokerrequest) Message to the appropriate Service. If the Service requires additional input Products to create the requested Product, it SHALL respond with a [`ServiceDependency`](#432-servicedependency) Message and an HTTP Status of 400. If the Service encountered another error (for example, a syntax error when requesting an outline), it SHALL respond with an HTTP status of 500 and a [`ServiceError`](#433-serviceerror) Message. If the requested Product was successfully created, it SHALL be returned directly (i.e. encoded as itself in JSON) with an HTTP status of 200.
 
-### 3.2.4. Caching
+## 5.4. Caching
 
 TODO
 
-# 4. Messages
+## 5.5. Service Protocol Messages
 
-Messages are documented with JSON Schema {{% ref jsonschema %}}.
+{{% draft01-message 5 5 1 ServiceNegotiation %}}
+{{% draft01-message 5 5 2 ServiceBrokerNegotiation %}}
 
-## 4.1. Client Messages
+## 5.6. Service Protocol Extensions
 
-### 4.1.1. `ClientVersion`
+Once extensions have been thought through, documented, and have a reference implementation, they can be submitted to become un-namespaced, and will appear in this section.
 
-#### 4.1.1.1. Schema
-
-{{% include-json "content/draft01/schemas/ClientVersion.json" %}}
-
-#### 4.1.1.2. Example
-
-{{% include-json "content/draft01/examples/ClientVersion.json" %}}
-
-### 4.1.2. `ClientRequest`
-
-#### 4.1.2.1. Schema
-
-{{% include-json "content/draft01/schemas/ClientRequest.json" %}}
-
-#### 4.1.2.2. Example
-
-{{% include-json "content/draft01/examples/ClientRequest.json" %}}
-
-## 4.2. Broker Messages
-
-### 4.2.1. `BrokerVersion`
-
-#### 4.2.1.1. Schema
-
-{{% include-json "content/draft01/schemas/BrokerVersion.json" %}}
-
-#### 4.2.1.2. Example
-
-{{% include-json "content/draft01/examples/BrokerVersion.json" %}}
-
-### 4.2.2. `BrokerServiceList`
-
-#### 4.2.2.1. Schema
-
-{{% include-json "content/draft01/schemas/BrokerServiceList.json" %}}
-
-#### 4.2.2.2. Example
-
-{{% include-json "content/draft01/examples/BrokerServiceList.json" %}}
-
-### 4.2.3. `BrokerResponse`
-
-#### 4.2.3.1. Schema
-
-{{% include-json "content/draft01/schemas/BrokerResponse.json" %}}
-
-#### 4.2.3.2. Example
-
-{{% include-json "content/draft01/examples/BrokerResponse.json" %}}
-
-## 4.3. Service Messages
-
-### 4.3.1. `ServiceVersion`
-
-#### 4.3.1.1. Schema
-
-{{% include-json "content/draft01/schemas/ServiceVersion.json" %}}
-
-#### 4.3.1.2. Example
-
-{{% include-json "content/draft01/examples/ServiceVersion.json" %}}
-
-## 4.4. Miscellaneous
-
-### 4.4.1. `BuiltinProductName`
-
-#### 4.4.1.1. Schema
-
-{{% include-json "content/draft01/schemas/BuiltinProductName.json" %}}
-
-#### 4.4.1.2. Example
-
-{{% include-json "content/draft01/examples/BuiltinProductName.json" %}}
-
-# 5. Products
+# 6. Products
 
 TODO
 
-# 6. Security Considerations
+# 7. Security Considerations
 
-## 6.1. Remote Access To Local Files
+## 7.1. Remote Access To Local Files
 
 The Broker sends arbitrary files to Services, which may be running on a different machine. A malicious Service could therefore request a sensitive file (for example, `~/.ssh/id_rsa`). As a result, a Broker MAY claim such a file does not exist.
 
-Furthermore, a security-concious user MAY run the Broker in a virtual machine or container, only giving access to user files in specific directories.
+Furthermore, a security-conscious user MAY run the Broker in a virtual machine or container, only giving access to user files in specific directories.
 
-## 6.2. Encrypted Transport
+## 7.2. Encrypted Transport
 
 HTTP/2 optionally supports TLS encryption. Most HTTP/2 implementations require encryption, so Clients, Brokers, and Services MAY support TLS encryption. Due to the relative difficulty of obtaining a TLS certificate for a local Service, Clients MUST support connecting to a Broker that does not support TLS.
 
-# 7. Further Work
+# 8. Further Work
 
-## 7.1. Binary Encoding instead of JSON
+## 8.1. Binary Encoding instead of JSON
 
 A speed boost could potentially be gained by using CBOR {{% ref rfc7049 %}}, MessagePack {{% ref msgpack %}} or a similar format instead of JSON. This could be added in a backwards-compatible way by using the existing Content-Type negotiation mechanisms in HTTP if desired.
 
-## 7.2. Asynchronous Communication
+## 8.2. Asynchronous Communication
 
-Re-adding support for asynchronous communication between Clients and Brokers on an opt-in basis would be a desirable goal. This could be implemented either by polling, which is relatively efficient in HTTP/2, or with a chunked response in HTTP/1.1.
+Re-adding support for asynchronous communication between Clients and Brokers as a protocol extension would be a desirable goal. This could be implemented either by polling, which is relatively efficient in HTTP/2, or with a chunked response in HTTP/1.1.
 
-## 7.3. Commands
+## 8.3. Commands
 
 Previous versions of Monto supported arbitrary commands being run by the Service, for example, renaming a function everywhere it appears (in all files). This is difficult to do while allowing Services to be run on remote machines. It could be achieved by allowing Services to request file writes in addition to reads, but would probably require a large amount of overhead, and come with its own security risks.
 
-# 8. References
+## 8.4. Stateful Services
 
-## 8.1. Normative References
+Some services inherently have state, such as debuggers. Unfortunately, this model does not translate well to the Monto Version 3 Protocol -- services may be shared with multiple brokers over the network. A possible solution would be to use a "state token," a unique identifier for each session.
+
+# 9. References
+
+## 9.1. Normative References
 
 {{< ref-citation jsonschema >}}
 Wright, A., Ed., and H. Andrews, Ed., "JSON Schema: A Media Type for Describing JSON Documents", [draft-wright-json-schema-01](https://tools.ietf.org/html/draft-wright-json-schema-01), April 2017.
@@ -263,6 +216,10 @@ Bormann, C., and P. Hoffman, "Concise Binary Object Representation (CBOR)", [RFC
 
 {{< ref-citation rfc7159 >}}
 Bray, T., "The JavaScript Object Notation (JSON) Data Interchange Format", [RFC 7159](https://tools.ietf.org/html/rfc7159), March 2014.
+{{< /ref-citation >}}
+
+{{< ref-citation rfc7230 >}}
+Fielding, R., Ed., and J. Reschke, Ed., "Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing", [RFC 7230](https://tools.ietf.org/html/rfc7230), June 2014.
 {{< /ref-citation >}}
 
 {{< ref-citation rfc7540 >}}

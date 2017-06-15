@@ -1,0 +1,37 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "ClientNegotiation",
+	"description": "The Message that a Client sends to a Broker during version negotiation.",
+
+	"type": "object",
+	"properties": {
+		"monto": { "$ref": "MontoVersion.json#" },
+		"client": {
+			"title": "ClientVersion",
+			"description": "The implementation and version of the Client.",
+
+			"type": "object",
+			"properties": {
+				"id": { "$ref": "Identifier.json#" },
+				"name": { "type": "string" },
+				"vendor": { "type": "string" },
+				"major": { "type": "integer" },
+				"minor": { "type": "integer" },
+				"patch": { "type": "integer" }
+			},
+			"additionalProperties": false,
+			"required": ["id"]
+		},
+		"extensions": {
+			"title": "ClientExtensions",
+			"description": "The Client extensions supported by the Client.",
+
+			"type": "array",
+			"minItems": 1,
+			"items": { "$ref": "NamespacedName.json#" },
+			"uniqueItems": true
+		}
+	},
+	"additionalProperties": false,
+	"required": ["monto", "client"]
+}

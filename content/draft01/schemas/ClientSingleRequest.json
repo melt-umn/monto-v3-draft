@@ -1,0 +1,14 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "ClientSingleRequest",
+	"description": "A single request for a product from a service.",
+
+	"type": "object",
+	"properties": {
+		"product": { "$ref": "ProductName.json#" },
+		"language": { "$ref": "Identifier.json#" },
+		"service": { "$ref": "Identifier.json#" }
+	},
+	"additionalProperties": false,
+	"required": ["product", "service"]
+}

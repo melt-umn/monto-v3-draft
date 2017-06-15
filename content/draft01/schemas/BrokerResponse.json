@@ -1,1 +1,23 @@
-TODO
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "BrokerResponse",
+	"description": "A response containing Products from the Broker to a Client.",
+
+	"type": "array",
+	"items": {
+		"title": "BrokerSingleResponse",
+		"description": "A single response from a Service.",
+		
+		"type": "object",
+		"properties": {
+			"ok": { "const": true },
+			"error": {
+				"anyOf": [
+					{ "type": "string" },
+					{ "const": null }
+				]
+			},
+			"product": { "$ref": "Product.json#" }
+		}
+	}
+}

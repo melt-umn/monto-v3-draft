@@ -1,21 +1,17 @@
 {
-	"path": "/home/example/foo/bar.c",
-	"request": [
+	"requests": [
 		{
-			"service": "com.example.quux",
-			"product": "highlighting"
-		},
+			"product": "errors",
+			"language": "python",
+			"service": "com.acme.quux"
+		}
+	],
+	"products": [
 		{
-			"service": "com.example.quux",
-			"product": "outline"
-		},
-		{
-			"service": "com.example.xyzzy",
-			"product": "errors"
-		},
-		{
-			"service": "com.example.spam",
-			"product": "com.example.spam/eggs"
+			"name": "source",
+			"language": "python",
+			"path": "/projects/hello/hello_world.py",
+			"contents": "print(\"Hello, world!\")"
 		}
 	]
 }

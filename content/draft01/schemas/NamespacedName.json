@@ -1,0 +1,8 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "NamespacedName",
+	"description": "A name after a dotted identifier.",
+
+	"type": "string",
+	"pattern": "[a-zA-Z_][a-zA-Z_0-9]*(\\.[a-zA-Z_][a-zA-Z_0-9]*)*/[a-zA-Z_][a-zA-Z_0-9]*"
+}

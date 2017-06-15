@@ -7,7 +7,9 @@ addons:
     packages:
      - python-pygments
 
-install: go get -u -v github.com/gohugoio/hugo
+install:
+ - go get -u -v github.com/gohugoio/hugo
+ - ./test/check-schemas.sh
 script: hugo -v
 
 deploy:
