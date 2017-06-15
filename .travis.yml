@@ -10,7 +10,9 @@ addons:
 install:
  - go get -u -v github.com/gohugoio/hugo
  - ./test/check-schemas.sh
-script: hugo -v
+script:
+ - pygmentize --version
+ - hugo -v
 
 deploy:
   github_token: $GITHUB_TOKEN
