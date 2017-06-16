@@ -9,8 +9,8 @@ addons:
 
 install:
  - go get -u -v github.com/gohugoio/hugo
- - ./test/check-schemas.sh
 script:
+ - ./test/check-schemas.sh
  - hugo -v
 
 deploy:

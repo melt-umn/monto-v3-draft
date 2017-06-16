@@ -12,7 +12,7 @@ title = "Monto Version 3 Specification, Draft 1"
 
 # Abstract
 
-This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments {{% ref monto %}}. These improvements allow for simpler implementations for Clients. They also make it feasible to have multiple Clients sharing a single Service.
+This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments {{% ref monto %}}. These improvements allow for simpler implementations for Clients. They also make it feasible to have multiple Clients sharing a single Service, and for Services to be operated over the Internet (rather than on the local network or on a single machine).
 
 # 1. Conventions and Terminology
 
@@ -30,7 +30,7 @@ Service
 : A piece of software that receives Products from a Broker, and uses them to produce other Products in response.
 
 Message
-: A single JSON value sent as an HTTP request or response.
+: A single JSON value sent as an HTTP request or response body.
 
 Product
 : Structured data sent between Clients, Brokers, and Services.
@@ -144,7 +144,7 @@ If the Service is unable to create the Product from the Products present in the 
 
 If the Service encounters some other error, the Service MUST respond with an HTTP Status of 500 and a `ServiceError` Message using the `ServiceErrorOther` variant as the body.
 
-Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`BrokerProduct`](#5-5-7-brokerproduct) Message containing the requested Product as the Body.
+Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`ServiceProduct`](#5-5-7-serviceproduct) Message containing the requested Product as the Body.
 
 ## 5.4. Service Protocol Messages
 
@@ -154,7 +154,8 @@ Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`BrokerPro
 {{% draft01-json 5 5 4 BrokerRequest %}}
 {{% draft01-json 5 5 5 BrokerSingleRequest %}}
 {{% draft01-json 5 5 6 ServiceError %}}
-{{% draft01-json 5 5 7 BrokerProduct %}}
+{{% draft01-json 5 5 7 ServiceProduct %}}
+{{% draft01-json 5 5 8 ServiceNotice %}}
 
 ## 5.5. Optimizations
 
@@ -178,17 +179,17 @@ Furthermore, a security-conscious user MAY run the Broker in a virtual machine o
 
 ## 7.2. Encrypted Transport
 
-HTTP/2 optionally supports TLS encryption. Most HTTP/2 implementations require encryption, so Clients, Brokers, and Services MAY support TLS encryption. Due to the relative difficulty of obtaining a TLS certificate for a local Service, Clients MUST support connecting to a Broker that does not support TLS.
+HTTP/2 optionally supports TLS encryption. Most HTTP/2 implementations require encryption, so Clients, Brokers, and Services SHOULD support TLS encryption. Due to the relative difficulty of obtaining a TLS certificate for a local Service, Clients SHOULD support connecting to a Broker that does not support TLS or uses a self-signed certificate.
 
 # 8. Further Work
 
 ## 8.1. Binary Encoding instead of JSON
 
-A speed boost could potentially be gained by using CBOR {{% ref rfc7049 %}}, MessagePack {{% ref msgpack %}} or a similar format instead of JSON. This could be added as  a simple protocol extension.
+A speed boost could potentially be gained by using CBOR {{% ref rfc7049 %}}, MessagePack {{% ref msgpack %}} or a similar format instead of JSON. This could be added as a simple protocol extension.
 
 ## 8.2. Asynchronous Communication
 
-Re-adding support for asynchronous communication between Clients and Brokers as a protocol extension would be a desirable goal. This could be implemented either by polling, which is relatively efficient in HTTP/2, or with a chunked response in HTTP/1.1.
+Re-adding support for asynchronous communication between Clients and Brokers as a protocol extension could be implemented as a protocol extension either by polling, which is relatively efficient in HTTP/2, or with a chunked response in HTTP/1.1.
 
 ## 8.3. Commands
 
