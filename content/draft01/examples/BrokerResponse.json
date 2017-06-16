@@ -1,7 +1,10 @@
 [
 	{
-		"name": "errors",
-		"language": "python",
-		"contents": []
+		"type": "product",
+		"value": {
+			"name": "errors",
+			"language": "python",
+			"contents": []
+		}
 	}
 ]

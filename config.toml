@@ -1,4 +1,6 @@
 baseURL = "https://melt-umn.github.io/monto-v3-draft/"
 taxonomies = {}
-PygmentsCodeFences = true
-PygmentsStyle = "emacs"
+
+# TODO Fix this on the Travis CI build.
+# PygmentsCodeFences = true
+# PygmentsStyle = "emacs"

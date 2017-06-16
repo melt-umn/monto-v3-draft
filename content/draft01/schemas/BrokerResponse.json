@@ -8,16 +8,31 @@
 		"title": "BrokerSingleResponse",
 		"description": "A single response from a Service.",
 		
-		"type": "object",
-		"properties": {
-			"ok": { "const": true },
-			"error": {
-				"anyOf": [
-					{ "type": "string" },
-					{ "const": null }
-				]
+		"oneOf": [
+			{
+				"title": "BrokerErrorResponse",
+				"description": "A BrokerSingleResponse representing an error.",
+
+				"type": "object",
+				"properties": {
+					"type": { "const": "error" },
+					"value": { "type": "string" }
+				},
+				"required": ["type", "value"],
+				"additionalProperties": false
 			},
-			"product": { "$ref": "Product.json#" }
-		}
+			{
+				"title": "BrokerProductResponse",
+				"description": "A BrokerSingleResponse representing the successful retrieval of a Product.",
+
+				"type": "object",
+				"properties": {
+					"type": { "const": "product" },
+					"value": { "$ref": "Product.json#" }
+				},
+				"required": ["type", "value"],
+				"additionalProperties": false
+			}
+		]
 	}
 }

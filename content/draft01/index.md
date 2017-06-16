@@ -4,7 +4,6 @@ title = "Monto Version 3 Specification, Draft 1"
 
 # TODOs
 
- - What should the service error format be?
  - What error should the broker return if a service dies during a request?
  - What if the service can't be reached at all?
    - Hard failure or soft?
@@ -99,7 +98,7 @@ If the `ClientRequest` Message contains requests for Products which a Service do
 
 Otherwise, the Broker SHALL respond with an HTTP Status of 200 and a [`BrokerResponse`](#4-5-5-brokerresponse) Message as the body. Each member of the `BrokerResponse` Message corresponds to one of the requests from the `ClientRequest` Message. No particular order is enforced; a Client MUST be able to handle a `BrokerResponse` Message whose elements have a different order from the requests in the `ClientRequest` Message.
 
-When a Service responds to the Broker with a Product, the [`ServiceProduct`](TODO) alternative MUST be present in the `BrokerResponse`. When a Service responds to the Broker with an error, the [`ServiceError`](TODO) alternative MUST be present instead.
+When a Service responds to the Broker with an HTTP Status of 200, the corresponding BrokerSingleResponse MUST be a `BrokerProductResponse`. Conversely, when the Service responds to the Broker with a [`ServiceError`](TODO), the BrokerSingleResponse MUST be a `BrokerErrorResponse`. If another error occurs while retrieving the Product, the BrokerSingleResponse MUST be a `BrokerErrorResponse`. The `"value"` field SHOULD state that the error came from the Broker rather than the Service.
 
 ## 4.5. Client Protocol Messages
 
