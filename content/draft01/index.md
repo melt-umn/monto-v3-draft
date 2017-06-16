@@ -4,9 +4,11 @@ title = "Monto Version 3 Specification, Draft 1"
 
 # TODOs
 
- - What error should the broker return if a service dies during a request?
- - What if the service can't be reached at all?
-   - Hard failure or soft?
+ - Client Protocol:
+   - Actually properly define an error format, rather than just making it a string. There should be structured errors for:
+     - unfulfillable request (dependencies)
+     - could not contact service
+     - error 500 from service
 
 # Abstract
 
@@ -64,11 +66,11 @@ Messages are documented with JSON Schema {{% ref jsonschema %}}.
 
 The schemas are also present in the "schemas" directory, which should accompany this document.
 
-{{% draft01-message 3 1 1 Identifier %}}
-{{% draft01-message 3 1 1 MontoVersion %}}
-{{% draft01-message 3 1 1 NamespacedName %}}
-{{% draft01-message 3 1 1 Product %}}
-{{% draft01-message 3 1 1 ProductName %}}
+{{% draft01-json 3 1 1 Identifier %}}
+{{% draft01-json 3 1 1 MontoVersion %}}
+{{% draft01-json 3 1 1 NamespacedName %}}
+{{% draft01-json 3 1 1 Product %}}
+{{% draft01-json 3 1 1 ProductName %}}
 
 # 4. The Client Protocol
 
@@ -82,35 +84,35 @@ Upon initiating a connection to a Broker, a Client MUST attempt to use an HTTP/2
 
 ## 4.2. Version Negotiation
 
-After the HTTP connection is established, the Client SHALL make a POST request to the `/monto/version` path, with a [`ClientNegotiation`](#4-5-1-clientnegotiation) Message as the body. The Broker SHALL check that it is compatible with the Client. The Broker SHALL respond with a [`ClientBrokerNegotiation`](#4-5-2-clientbrokernegotiation) Message. If the Broker is compatible with the Client, this response SHALL have an HTTP Status of 200. If the Broker and Client are not compatible, the response SHALL instead have an HTTP Status of 409.
+After the HTTP connection is established, the Client SHALL make a POST request to the `/monto/version` path, with a [`ClientNegotiation`](#4-4-1-clientnegotiation) Message as the body. The Broker SHALL check that it is compatible with the Client. The Broker SHALL respond with a [`ClientBrokerNegotiation`](#4-4-2-clientbrokernegotiation) Message. If the Broker is compatible with the Client, this response SHALL have an HTTP Status of 200. If the Broker and Client are not compatible, the response SHALL instead have an HTTP Status of 409.
 
 If the HTTP Status is 200, the Client SHALL check that it is compatible with the Broker. If the HTTP Status is not 200 or the Client and Broker are not compatible as determined by the Client, the Client SHOULD inform the user and MUST close the connection.
 
 Compatibility between versions of the Client Protocol SHALL be determined using the Semantic Versioning rules. Additionally, a Client MAY reject a Broker that is known to not follow this specification correctly, and vice versa.
 
-If the intersection of the `extensions` field of the `ClientNegotiation` and `ClientBrokerNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker. The semantics of an extension being enabled are left to that extension. All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-6-client-protocol-extensions) section below.
+If the intersection of the `extensions` field of the `ClientNegotiation` and `ClientBrokerNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker. The semantics of an extension being enabled are left to that extension. All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-4-client-protocol-extensions) section below.
  
 ## 4.3. Requesting Products
 
-A Client SHALL request Products by making a POST request to the `/monto/products` path, with a [`ClientRequest`](#4-5-3-clientrequest) Message as the body.
+A Client SHALL request Products by making a POST request to the `/monto/products` path, with a [`ClientRequest`](#4-4-3-clientrequest) Message as the body.
 
-If the `ClientRequest` Message contains requests for Products which a Service does not expose, or a request for Products from a Service that does not exist, the Broker SHALL respond with an HTTP Status of 400 and the [`ClientSingleRequest`](#4-5-4-clientsinglerequest) Message corresponding to the illegal request as the body.
+If the `ClientRequest` Message contains requests for Products which a Service does not expose, or a request for Products from a Service that does not exist, the Broker SHALL respond with an HTTP Status of 400 and the [`ClientSingleRequest`](#4-4-4-clientsinglerequest) Message corresponding to the illegal request as the body.
 
-Otherwise, the Broker SHALL respond with an HTTP Status of 200 and a [`BrokerResponse`](#4-5-5-brokerresponse) Message as the body. Each member of the `BrokerResponse` Message corresponds to one of the requests from the `ClientRequest` Message. No particular order is enforced; a Client MUST be able to handle a `BrokerResponse` Message whose elements have a different order from the requests in the `ClientRequest` Message.
+Otherwise, the Broker SHALL respond with an HTTP Status of 200 and a [`BrokerResponse`](#4-4-5-brokerresponse) Message as the body. Each member of the `BrokerResponse` Message corresponds to one of the requests from the `ClientRequest` Message. No particular order is enforced; a Client MUST be able to handle a `BrokerResponse` Message whose elements have a different order from the requests in the `ClientRequest` Message.
 
-When a Service responds to the Broker with an HTTP Status of 200, the corresponding BrokerSingleResponse MUST be a `BrokerProductResponse`. Conversely, when the Service responds to the Broker with a [`ServiceError`](TODO), the BrokerSingleResponse MUST be a `BrokerErrorResponse`. If another error occurs while retrieving the Product, the BrokerSingleResponse MUST be a `BrokerErrorResponse`. The `"value"` field SHOULD state that the error came from the Broker rather than the Service.
+When a Service responds to the Broker with an HTTP Status of 200, the corresponding BrokerSingleResponse MUST be a `BrokerProductResponse`. Conversely, when the Service responds to the Broker with a [`ServiceError`](#5-5-6-serviceerror), the BrokerSingleResponse MUST be a `BrokerErrorResponse`. If another error occurs while retrieving the Product, the BrokerSingleResponse MUST be a `BrokerErrorResponse`. The `value` field SHOULD state that the error came from the Broker rather than the Service.
 
-## 4.5. Client Protocol Messages
+## 4.4. Client Protocol Messages
 
-{{% draft01-message 4 5 1 ClientNegotiation %}}
-{{% draft01-message 4 5 2 ClientBrokerNegotiation %}}
-{{% draft01-message 4 5 3 ClientRequest %}}
-{{% draft01-message 4 5 4 ClientSingleRequest %}}
-{{% draft01-message 4 5 5 BrokerResponse %}}
+{{% draft01-json 4 4 1 ClientNegotiation %}}
+{{% draft01-json 4 4 2 ClientBrokerNegotiation %}}
+{{% draft01-json 4 4 3 ClientRequest %}}
+{{% draft01-json 4 4 4 ClientSingleRequest %}}
+{{% draft01-json 4 4 5 BrokerResponse %}}
 
-## 4.6. Client Protocol Extensions
+## 4.5. Client Protocol Extensions
 
-Once extensions have been thought through, documented, and have a reference implementation, they can be submitted to become un-namespaced, and will appear in this section.
+Currently, there are no built-in extensions defined for the Client Protocol. However, a Client or Broker MAY support arbitrary extensions whose names are in the form of the [`NamespacedName`](#3-1-1-namespacedname) above.
 
 # 5. The Service Protocol
 
@@ -124,28 +126,43 @@ Brokers MUST first attempt to use HTTP/2, and MAY support HTTP/1.1 as well. Serv
 
 ## 5.2. Version Negotiation
 
-After the HTTP connection is established, the Broker SHALL make a POST request to the `/monto/version` path, with a [`BrokerVersion`](#421-brokerversion) Message as the body. The Service SHALL check that it is compatible with the Broker. The Service SHALL respond with a [`ServiceVersion`](#431-serviceversion) Message. If the Service is compatible with the Broker, this response SHALL have an HTTP Status of 200. If the Service and Broker are not compatible, the response SHALL instead have an HTTP Status of 409.
+After the HTTP connection is established, the Broker SHALL make a POST request to the `/monto/version` path, with a [`ServiceBrokerNegotiation`](#5-5-1-servicebrokernegotiation) Message as the body. The Service SHALL check that it is compatible with the Broker. The Service SHALL respond with a [`ServiceNegotiation`](#5-5-2-servicenegotiation) Message. If the Service is compatible with the Broker, this response SHALL have an HTTP Status of 200. If the Service and Broker are not compatible, the response SHALL instead have an HTTP Status of 409.
 
-If the HTTP Status is 200, the Broker SHALL check that it is compatible with the Service. If the HTTP Status is not 200 or the Broker and Service are not compatible as determined by the Broker, the Broker SHOULD inform the user and MUST close the connection.
+If the HTTP Status is 200, the Broker SHALL check that it is compatible with the Service. If the HTTP Status is not 200 or the Broker and Service are not compatible as determined by the Broker, the Broker MUST close the connection. In this situation, the Broker SHOULD log this event, and MAY choose to ignore the Service's existence.
 
 Compatibility between versions of the Service Protocol SHALL be determined using the Semantic Versioning rules. Additionally, a Broker MAY reject a Service that is known to not follow this specification correctly, and vice versa.
 
+If the intersection of the `extensions` field of the `ServiceBrokerNegotiation` and `ServiceNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker. The semantics of an extension being enabled are left to that extension. All non-namespaced extensions are documented in the [Service Protocol Extensions](#5-6-service-protocol-extensions) section below.
+
 ## 5.3. Requesting Products
 
-To request Products, the Broker SHALL send a [`BrokerRequest`](#424-brokerrequest) Message to the appropriate Service. If the Service requires additional input Products to create the requested Product, it SHALL respond with a [`ServiceDependency`](#432-servicedependency) Message and an HTTP Status of 400. If the Service encountered another error (for example, a syntax error when requesting an outline), it SHALL respond with an HTTP status of 500 and a [`ServiceError`](#433-serviceerror) Message. If the requested Product was successfully created, it SHALL be returned directly (i.e. encoded as itself in JSON) with an HTTP status of 200.
+The broker SHALL request a Product from a Service by making a POST request to the `/monto/service` path, with a [`BrokerRequest`](#5-5-4-brokerrequest) as the body.
 
-## 5.4. Caching
+If the `BrokerRequest` Message contains a request for a Product which the Service does not expose, the Service MUST respond with an HTTP Status of 400 with the `BrokerSingleRequest` that failed as the body.
+
+If the Service is unable to create the Product from the Products present in the `BrokerRequest`, the Service MUST respond with an HTTP Status of 500 and a `ServiceError` Message using the `ServiceErrorUnmetDependency` variant as the body.
+
+If the Service encounters some other error, the Service MUST respond with an HTTP Status of 500 and a `ServiceError` Message using the `ServiceErrorOther` variant as the body.
+
+Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`BrokerProduct`](#5-5-7-brokerproduct) Message containing the requested Product as the Body.
+
+## 5.4. Service Protocol Messages
+
+{{% draft01-json 5 5 1 ServiceBrokerNegotiation %}}
+{{% draft01-json 5 5 2 ServiceNegotiation %}}
+{{% draft01-json 5 5 3 ServiceExtensionName %}}
+{{% draft01-json 5 5 4 BrokerRequest %}}
+{{% draft01-json 5 5 5 BrokerSingleRequest %}}
+{{% draft01-json 5 5 6 ServiceError %}}
+{{% draft01-json 5 5 7 BrokerProduct %}}
+
+## 5.5. Optimizations
 
 TODO
 
-## 5.5. Service Protocol Messages
-
-{{% draft01-message 5 5 1 ServiceNegotiation %}}
-{{% draft01-message 5 5 2 ServiceBrokerNegotiation %}}
-
 ## 5.6. Service Protocol Extensions
 
-Once extensions have been thought through, documented, and have a reference implementation, they can be submitted to become un-namespaced, and will appear in this section.
+Currently, there are no built-in extensions defined for the Service Protocol. However, a Broker or Service MAY support arbitrary extensions whose names are in the form of the `NamespacedName` above.
 
 # 6. Products
 
@@ -167,7 +184,7 @@ HTTP/2 optionally supports TLS encryption. Most HTTP/2 implementations require e
 
 ## 8.1. Binary Encoding instead of JSON
 
-A speed boost could potentially be gained by using CBOR {{% ref rfc7049 %}}, MessagePack {{% ref msgpack %}} or a similar format instead of JSON. This could be added in a backwards-compatible way by using the existing Content-Type negotiation mechanisms in HTTP if desired.
+A speed boost could potentially be gained by using CBOR {{% ref rfc7049 %}}, MessagePack {{% ref msgpack %}} or a similar format instead of JSON. This could be added as  a simple protocol extension.
 
 ## 8.2. Asynchronous Communication
 
