@@ -11,8 +11,8 @@ install:
  - go get -u -v github.com/gohugoio/hugo
  - go get -u -v github.com/santhosh-tekuri/jsonschema/cmd/jv
  - go get -u -v github.com/wjdp/htmltest
-script: hugo -v
-after_script:
+script:
+ - hugo -v
  - ./test/check-schemas.sh
  - ./test/check-links.sh
 
