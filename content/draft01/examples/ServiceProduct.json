@@ -6,7 +6,7 @@
 	},
 	"notices": [
 		{
-			"type": "unused_product",
+			"type": "unused_dependency",
 			"product": {
 				"name": "errors",
 				"language": "python",
