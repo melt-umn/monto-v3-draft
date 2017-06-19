@@ -12,4 +12,5 @@ function testDir() {
 
 command -v jv >/dev/null || go get -u github.com/santhosh-tekuri/jsonschema/cmd/jv
 
-testDir draft01/schemas
+testDir draft01/messages
+testDir draft01/products

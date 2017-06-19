@@ -183,7 +183,7 @@ Currently, there are no built-in extensions defined for the Service Protocol. Ho
 
 # 6. Products
 
-TODO
+{{% draft01-product 6 1 errors %}}
 
 # 7. Security Considerations
 
