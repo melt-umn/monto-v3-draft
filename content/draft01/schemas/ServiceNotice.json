@@ -5,17 +5,16 @@
 
 	"oneOf": [
 		{
-			"title": "ServiceNoticeUnusedProduct",
-			"description": "A notice that a product was unused when producing a Product.",
+			"title": "ServiceNoticeUnusedDependency",
+			"description": "A notice that a dependency was unused when producing a Product.",
 
 			"type": "object",
 			"properties": {
-				"product": { "$ref": "ProductName.json#" },
-				"language": { "$ref": "Identifier.json#" },
-				"path": { "type": "string" }
+				"type": { "const": "unused_dependency" },
+				"product": { "$ref": "ProductIdentifier.json#" }
 			},
 			"additionalProperties": false,
-			"required": ["product"]
+			"required": ["type", "product"]
 		}
 	]
 }

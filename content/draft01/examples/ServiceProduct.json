@@ -1,1 +1,17 @@
-TODO
+{
+	"product": {
+		"name": "errors",
+		"language": "python",
+		"contents": []
+	},
+	"notices": [
+		{
+			"type": "unused_product",
+			"product": {
+				"name": "errors",
+				"language": "python",
+				"path": "/home/example/old_file.py"
+			}
+		}
+	]
+}

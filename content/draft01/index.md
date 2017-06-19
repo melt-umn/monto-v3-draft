@@ -138,9 +138,9 @@ If the intersection of the `extensions` field of the `ServiceBrokerNegotiation` 
 
 The broker SHALL request a Product from a Service by making a POST request to the `/monto/service` path, with a [`BrokerRequest`](#5-5-4-brokerrequest) as the body.
 
-If the `BrokerRequest` Message contains a request for a Product which the Service does not expose, the Service MUST respond with an HTTP Status of 400 with the `BrokerSingleRequest` that failed as the body.
+If the `BrokerRequest` Message contains a request for a Product which the Service does not expose, the Service MUST respond with an HTTP Status of 400 with the `ProductIdentifier` of the failed `BrokerRequest` as the body.
 
-If the Service is unable to create the Product from the Products present in the `BrokerRequest`, the Service MUST respond with an HTTP Status of 500 and a `ServiceError` Message using the `ServiceErrorUnmetDependency` variant as the body.
+If the Service is unable to create the requested Product from the Products present in the `BrokerRequest`, the Service MUST respond with an HTTP Status of 500 and a `ServiceError` Message using the `ServiceErrorUnmetDependency` variant as the body.
 
 If the Service encounters some other error, the Service MUST respond with an HTTP Status of 500 and a `ServiceError` Message using the `ServiceErrorOther` variant as the body.
 
@@ -152,7 +152,7 @@ Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`ServicePr
 {{% draft01-json 5 5 2 ServiceNegotiation %}}
 {{% draft01-json 5 5 3 ServiceExtensionName %}}
 {{% draft01-json 5 5 4 BrokerRequest %}}
-{{% draft01-json 5 5 5 BrokerSingleRequest %}}
+{{% draft01-json 5 5 5 ProductIdentifier %}}
 {{% draft01-json 5 5 6 ServiceError %}}
 {{% draft01-json 5 5 7 ServiceProduct %}}
 {{% draft01-json 5 5 8 ServiceNotice %}}

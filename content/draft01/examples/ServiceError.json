@@ -1,1 +1,21 @@
-TODO
+{
+	"errors": [
+		{
+			"type": "unmet_dependency",
+			"value": {
+				"name": "source",
+				"path": "/home/example/foo.py",
+				"language": "python"
+			}
+		},
+		{
+			"type": "unmet_dependency",
+			"value": {
+				"name": "source",
+				"path": "/home/example/bar.py",
+				"language": "python"
+			}
+		}
+	],
+	"notices": []
+}

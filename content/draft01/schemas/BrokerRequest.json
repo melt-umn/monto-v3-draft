@@ -13,26 +13,8 @@
 			"items": { "$ref": "Product.json#" },
 			"uniqueItems": true
 		},
-		"request": {
-			"title": "BrokerRequest",
-			"description": "The actual request.",
-
-			"type": "array",
-			"items": {
-				"title": "BrokerSingleRequest",
-				"description": "A single request for a product from a service.",
-
-				"type": "object",
-				"properties": {
-					"product": { "$ref": "ProductName.json#" },
-					"language": { "$ref": "Identifier.json#" }
-				},
-				"additionalProperties": false,
-				"required": ["product"]
-			},
-			"uniqueItems": true
-		}
+		"request": { "$ref": "ProductIdentifier.json#" }
 	},
 	"additionalProperties": false,
-	"required": ["requests"]
+	"required": ["request"]
 }

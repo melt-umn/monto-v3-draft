@@ -1,0 +1,8 @@
+{
+	"type": "unused_product",
+	"product": {
+		"name": "errors",
+		"language": "haskell",
+		"path": "/home/example/.xmonad/xmonad.hs"
+	}
+}
