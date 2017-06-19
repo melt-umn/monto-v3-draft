@@ -1,1 +1,38 @@
-TODO
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "BrokerRequest",
+	"description": "A request for a Product from the Broker to a Service.",
+
+	"type": "object",
+	"properties": {
+		"products": {
+			"title": "BrokerProducts",
+			"description": "Products being provided along with the request.",
+
+			"type": "array",
+			"items": { "$ref": "Product.json#" },
+			"uniqueItems": true
+		},
+		"request": {
+			"title": "BrokerRequest",
+			"description": "The actual request.",
+
+			"type": "array",
+			"items": {
+				"title": "BrokerSingleRequest",
+				"description": "A single request for a product from a service.",
+
+				"type": "object",
+				"properties": {
+					"product": { "$ref": "ProductName.json#" },
+					"language": { "$ref": "Identifier.json#" }
+				},
+				"additionalProperties": false,
+				"required": ["product"]
+			},
+			"uniqueItems": true
+		}
+	},
+	"additionalProperties": false,
+	"required": ["requests"]
+}
