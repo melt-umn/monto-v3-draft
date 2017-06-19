@@ -58,11 +58,12 @@ Messages are documented with JSON Schema {{% ref jsonschema %}}.
 
 The schemas are also present in the "schemas" directory, which should accompany this document.
 
-{{% draft01-json 3 1 1 Identifier %}}
-{{% draft01-json 3 1 1 MontoVersion %}}
-{{% draft01-json 3 1 1 NamespacedName %}}
-{{% draft01-json 3 1 1 Product %}}
-{{% draft01-json 3 1 1 ProductName %}}
+{{% draft01-message 3 1 1 Identifier %}}
+{{% draft01-message 3 1 2 MontoVersion %}}
+{{% draft01-message 3 1 3 NamespacedName %}}
+{{% draft01-message 3 1 4 Product %}}
+{{% draft01-message 3 1 5 ProductIdentifier %}}
+{{% draft01-message 3 1 6 ProductName %}}
 
 # 4. The Client Protocol
 
@@ -98,15 +99,15 @@ When a Service responds to the Broker with an HTTP Status of 200, the correspond
 
 ## 4.4. Client Protocol Messages
 
-{{% draft01-json 4 4 1 ClientNegotiation %}}
-{{% draft01-json 4 4 2 ClientBrokerNegotiation %}}
-{{% draft01-json 4 4 3 ClientRequest %}}
-{{% draft01-json 4 4 4 ClientSingleRequest %}}
-{{% draft01-json 4 4 5 BrokerResponse %}}
+{{% draft01-message 4 4 1 ClientNegotiation %}}
+{{% draft01-message 4 4 2 ClientBrokerNegotiation %}}
+{{% draft01-message 4 4 3 ClientRequest %}}
+{{% draft01-message 4 4 4 ClientSingleRequest %}}
+{{% draft01-message 4 4 5 BrokerResponse %}}
 
 ## 4.5. Client Protocol Extensions
 
-Currently, there are no built-in extensions defined for the Client Protocol. However, a Client or Broker MAY support arbitrary extensions whose names are in the form of the [`NamespacedName`](#3-1-1-namespacedname) above.
+Currently, there are no built-in extensions defined for the Client Protocol. However, a Client or Broker MAY support arbitrary extensions whose names are in the form of the [`NamespacedName`](#3-1-3-namespacedname) above.
 
 # 5. The Service Protocol
 
@@ -144,13 +145,13 @@ Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`ServicePr
 
 ## 5.4. Service Protocol Messages
 
-{{% draft01-json 5 5 1 ServiceBrokerNegotiation %}}
-{{% draft01-json 5 5 2 ServiceNegotiation %}}
-{{% draft01-json 5 5 3 BrokerRequest %}}
-{{% draft01-json 5 5 4 ProductIdentifier %}}
-{{% draft01-json 5 5 5 ServiceError %}}
-{{% draft01-json 5 5 6 ServiceProduct %}}
-{{% draft01-json 5 5 7 ServiceNotice %}}
+{{% draft01-message 5 5 1 ServiceBrokerNegotiation %}}
+{{% draft01-message 5 5 2 ServiceNegotiation %}}
+{{% draft01-message 5 5 3 BrokerRequest %}}
+{{% draft01-message 5 5 4 ProductIdentifier %}}
+{{% draft01-message 5 5 5 ServiceError %}}
+{{% draft01-message 5 5 6 ServiceProduct %}}
+{{% draft01-message 5 5 7 ServiceNotice %}}
 
 ## 5.5. Optimizations
 

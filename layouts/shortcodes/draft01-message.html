@@ -6,6 +6,6 @@
 {{ $exampleHeader := printf "#### %s.2. Example\n" $version }}
 
 {{ $schema := printf "```json\n%s\n```" (readFile (printf "content/draft01/schemas/%s.json" $name)) }}
-{{ $example := printf "```json\n%s\n```" (readFile (printf "content/draft01/examples/%s.json" $name)) }}
+{{ $example := printf "```json\n%s\n```" (readFile (printf "content/draft01/schemas/examples/%s.json" $name)) }}
 
 {{ printf "%s%s%s\n%s%s\n" $topHeader $schemaHeader $schema $exampleHeader $example | markdownify }}
