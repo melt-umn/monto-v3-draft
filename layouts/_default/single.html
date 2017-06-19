@@ -14,5 +14,17 @@
 		<main>
 			{{ .Content }}
 		</main>
+		<script>
+			var sectionAnchors = new AnchorJS();
+			sectionAnchors.options.class = "section-anchor";
+			sectionAnchors.options.icon = "#";
+			sectionAnchors.add("main h1, main h2, main h3, main h4, main h5, main h6");
+
+			var paragraphAnchors = new AnchorJS();
+			paragraphAnchors.options.class = "paragraph-anchor";
+			paragraphAnchors.options.icon = "¶";
+			paragraphAnchors.options.placement = "left";
+			paragraphAnchors.add("main p");
+		</script>
 	</body>
 </html>

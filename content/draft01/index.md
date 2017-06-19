@@ -91,6 +91,8 @@ If the HTTP Status is 200, the Client SHALL check that it is compatible with the
 Compatibility between versions of the Client Protocol SHALL be determined using the Semantic Versioning rules. Additionally, a Client MAY reject a Broker that is known to not follow this specification correctly, and vice versa.
 
 If the intersection of the `extensions` field of the `ClientNegotiation` and `ClientBrokerNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker. The semantics of an extension being enabled are left to that extension. All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-4-client-protocol-extensions) section below.
+
+If a non-zero number of extensions are enabled, all requests from the Client to the Broker and all responses from the Broker to the Client MUST have a `Monto-Extensions` HTTP header with a space-separated list of the enabled extensions, sorted lexicographically. For example, if the extensions `com.acme/foo` and `org.example/bar` are enabled, the header would read `Monto-Extensions: com.acme/foo org.example/bar`. The header MAY be present with an empty value when no extensions are enabled.
  
 ## 4.3. Requesting Products
 
@@ -134,6 +136,8 @@ Compatibility between versions of the Service Protocol SHALL be determined using
 
 If the intersection of the `extensions` field of the `ServiceBrokerNegotiation` and `ServiceNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker. The semantics of an extension being enabled are left to that extension. All non-namespaced extensions are documented in the [Service Protocol Extensions](#5-6-service-protocol-extensions) section below.
 
+If a non-zero number of extensions are enabled, all requests from the Broker to the Service and all responses from the Service to the Broker MUST have a `Monto-Extensions` HTTP header with a space-separated list of the enabled extensions, sorted lexicographically. For example, if the extensions `com.acme/foo` and `org.example/bar` are enabled, the header would read `Monto-Extensions: com.acme/foo org.example/bar`. The header MAY be present with an empty value when no extensions are enabled.
+
 ## 5.3. Requesting Products
 
 The broker SHALL request a Product from a Service by making a POST request to the `/monto/service` path, with a [`BrokerRequest`](#5-5-4-brokerrequest) as the body.
@@ -150,12 +154,11 @@ Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`ServicePr
 
 {{% draft01-json 5 5 1 ServiceBrokerNegotiation %}}
 {{% draft01-json 5 5 2 ServiceNegotiation %}}
-{{% draft01-json 5 5 3 ServiceExtensionName %}}
-{{% draft01-json 5 5 4 BrokerRequest %}}
-{{% draft01-json 5 5 5 ProductIdentifier %}}
-{{% draft01-json 5 5 6 ServiceError %}}
-{{% draft01-json 5 5 7 ServiceProduct %}}
-{{% draft01-json 5 5 8 ServiceNotice %}}
+{{% draft01-json 5 5 3 BrokerRequest %}}
+{{% draft01-json 5 5 4 ProductIdentifier %}}
+{{% draft01-json 5 5 5 ServiceError %}}
+{{% draft01-json 5 5 6 ServiceProduct %}}
+{{% draft01-json 5 5 7 ServiceNotice %}}
 
 ## 5.5. Optimizations
 
