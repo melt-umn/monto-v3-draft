@@ -2,14 +2,6 @@
 title = "Monto Version 3 Specification, Draft 1"
 +++
 
-# TODOs
-
- - Client Protocol:
-   - Actually properly define an error format, rather than just making it a string. There should be structured errors for:
-     - unfulfillable request (dependencies)
-     - could not contact service
-     - error 500 from service
-
 # Abstract
 
 This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments {{% ref monto %}}. These improvements allow for simpler implementations for Clients. They also make it feasible to have multiple Clients sharing a single Service, and for Services to be operated over the Internet (rather than on the local network or on a single machine).
@@ -162,7 +154,27 @@ Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`ServicePr
 
 ## 5.5. Optimizations
 
-TODO
+The naïve Broker dependency-resolution algorithm is rather inefficient, and can be optimized in several ways.
+
+### 5.5.1. Caching the Dependency Graph
+
+Typically, a source file's current dependencies are very similar to its past dependencies. This can be taken advantage of by caching the dependencies of a specific Product and requesting its dependencies before requesting the final Product. This potentially could result in more work being done that needed (as a no-longer needed dependency is still computed). Most edit actions don't affect the dependency graph, though, so this approach is efficient in the general case.
+
+### 5.5.2. Inferring Dependencies
+
+The semantics specified here intentionally do not specify in what order the Broker should query Services to obtain a Product. This allows a Broker to attempt to infer the dependencies a particular Product will have. Although no heuristics are described here, they could in principle be developed and applied.
+
+### 5.5.3. Caching Products
+
+Most projects' dependencies contains more source code than the projects themselves -- the dependencies' source code is unlikely to change, and it is wasteful to send it over the network with each request. A simple Service Protocol Extension that remedies this problem would be a caching mechanism, in which the Broker would send an opaque identifier (e.g. a SHA-256 hash) for the dependencies instead of the dependencies themselves. A Service could then either use a cached copy, if one exists, or fail with an error similar to the `ServiceErrorUnmetDependency` error if the dependency is not in the cache.
+
+### 5.5.4. Incremental Product Transfer
+
+The next step on the above would be to send all changes to files as deltas from a previous state. This would greatly decrease the amount of network bandwidth required, and would be a relatively minor variation on the above.
+
+### 5.5.5. Incremental Compilation
+
+Once an incremental transfer system exists, full incremental compilation is easy to support. A Service would only have to cache the last Product cooresponding to the input, and then could use it in the next compilation for that Product.
 
 ## 5.6. Service Protocol Extensions
 
