@@ -90,7 +90,7 @@ If the HTTP Status is 200, the Client SHALL check that it is compatible with the
 
 Compatibility between versions of the Client Protocol SHALL be determined using the Semantic Versioning rules. Additionally, a Client MAY reject a Broker that is known to not follow this specification correctly, and vice versa.
 
-If the intersection of the `extensions` field of the `ClientNegotiation` and `ClientBrokerNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker. The semantics of an extension being enabled are left to that extension. All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-4-client-protocol-extensions) section below.
+If the intersection of the `extensions` field of the `ClientNegotiation` and `ClientBrokerNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker. The semantics of an extension being enabled are left to that extension. All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-5-client-protocol-extensions) section below.
 
 If a non-zero number of extensions are enabled, all requests from the Client to the Broker and all responses from the Broker to the Client MUST have a `Monto-Extensions` HTTP header with a space-separated list of the enabled extensions, sorted lexicographically. For example, if the extensions `com.acme/foo` and `org.example/bar` are enabled, the header would read `Monto-Extensions: com.acme/foo org.example/bar`. The header MAY be present with an empty value when no extensions are enabled.
  
@@ -102,7 +102,7 @@ If the `ClientRequest` Message contains requests for Products which a Service do
 
 Otherwise, the Broker SHALL respond with an HTTP Status of 200 and a [`BrokerResponse`](#4-4-5-brokerresponse) Message as the body. Each member of the `BrokerResponse` Message corresponds to one of the requests from the `ClientRequest` Message. No particular order is enforced; a Client MUST be able to handle a `BrokerResponse` Message whose elements have a different order from the requests in the `ClientRequest` Message.
 
-When a Service responds to the Broker with an HTTP Status of 200, the corresponding BrokerSingleResponse MUST be a `BrokerProductResponse`. Conversely, when the Service responds to the Broker with a [`ServiceError`](#5-5-6-serviceerror), the BrokerSingleResponse MUST be a `BrokerErrorResponse`. If another error occurs while retrieving the Product, the BrokerSingleResponse MUST be a `BrokerErrorResponse`. The `value` field SHOULD state that the error came from the Broker rather than the Service.
+When a Service responds to the Broker with an HTTP Status of 200, the corresponding BrokerSingleResponse MUST be a `BrokerProductResponse`. Conversely, when the Service responds to the Broker with a [`ServiceError`](#5-5-5-serviceerror), the BrokerSingleResponse MUST be a `BrokerErrorResponse`. If another error occurs while retrieving the Product, the BrokerSingleResponse MUST be a `BrokerErrorResponse`. The `value` field SHOULD state that the error came from the Broker rather than the Service.
 
 ## 4.4. Client Protocol Messages
 
@@ -140,7 +140,7 @@ If a non-zero number of extensions are enabled, all requests from the Broker to 
 
 ## 5.3. Requesting Products
 
-The broker SHALL request a Product from a Service by making a POST request to the `/monto/service` path, with a [`BrokerRequest`](#5-5-4-brokerrequest) as the body.
+The broker SHALL request a Product from a Service by making a POST request to the `/monto/service` path, with a [`BrokerRequest`](#5-5-3-brokerrequest) as the body.
 
 If the `BrokerRequest` Message contains a request for a Product which the Service does not expose, the Service MUST respond with an HTTP Status of 400 with the `ProductIdentifier` of the failed `BrokerRequest` as the body.
 
@@ -148,7 +148,7 @@ If the Service is unable to create the requested Product from the Products prese
 
 If the Service encounters some other error, the Service MUST respond with an HTTP Status of 500 and a `ServiceError` Message using the `ServiceErrorOther` variant as the body.
 
-Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`ServiceProduct`](#5-5-7-serviceproduct) Message containing the requested Product as the Body.
+Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`ServiceProduct`](#5-5-6-serviceproduct) Message containing the requested Product as the Body.
 
 ## 5.4. Service Protocol Messages
 
