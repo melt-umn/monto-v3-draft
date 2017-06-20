@@ -183,7 +183,10 @@ Currently, there are no built-in extensions defined for the Service Protocol. Ho
 
 # 6. Products
 
+Some fields are in common between most Product types. The main two are `startByte` and `endByte`. They represent the start and end of a selection of text from the corresponding source code. `startByte` is inclusive, while `endByte` is exclusive. The usage of "byte" in their names is significant -- these MUST be the the byte indexes, rather than the character indexes.
+
 {{% draft01-product 6 1 errors %}}
+{{% draft01-product 6 2 highlighting %}}
 
 # 7. Security Considerations
 

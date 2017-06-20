@@ -1,0 +1,36 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "highlighting",
+	"description": "Token information to be used for highlighting source code.",
+
+	"type": "array",
+	"items": {
+		"type": "object",
+		"properties": {
+			"startByte": { "$ref": "#/definitions/byteOffset" },
+			"endByte": { "$ref": "#/definitions/byteOffset" },
+			"token": { "$ref": "#/definitions/token" }
+		},
+		"required": ["startByte", "endByte", "token"],
+		"additionalProperties": false
+	},
+
+	"definitions": {
+		"byteOffset": {
+			"type": "integer",
+			"minimum": 0
+		},
+		"token": {
+			"oneOf": [
+				{ "const": "comment" },
+				{ "const": "function" },
+				{ "const": "identifier" },
+				{ "const": "keyword" },
+				{ "const": "literal" },
+				{ "const": "operator" },
+				{ "const": "punctuation" },
+				{ "const": "type" }
+			]
+		}
+	}
+}
