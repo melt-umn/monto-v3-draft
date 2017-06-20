@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-06/schema#",
 	"title": "Product",
-	"description": "A product, along with its contents.",
+	"description": "A Product, along with its contents.",
 
 	"type": "object",
 	"properties": {

@@ -7,7 +7,7 @@
 		{ "$ref": "NamespacedName.json#" },
 		{
 			"title": "BuiltInProductName",
-			"description": "The name of a product defined by the specification.",
+			"description": "The name of a Product defined by the specification.",
 
 			"enum": [
 				"directory",
