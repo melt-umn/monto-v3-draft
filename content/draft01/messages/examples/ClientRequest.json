@@ -1,8 +1,11 @@
 {
 	"requests": [
 		{
-			"product": "errors",
-			"language": "python",
+			"product": {
+				"name": "source",
+				"language": "python",
+				"path": "/projects/hello/hello_world.py"
+			},
 			"service": "com.acme.quux"
 		}
 	],

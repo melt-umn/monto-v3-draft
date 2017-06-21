@@ -5,8 +5,7 @@
 
 	"type": "object",
 	"properties": {
-		"product": { "$ref": "ProductName.json#" },
-		"language": { "$ref": "Identifier.json#" },
+		"product": { "$ref": "ProductIdentifier.json#" },
 		"service": { "$ref": "Identifier.json#" }
 	},
 	"additionalProperties": false,
