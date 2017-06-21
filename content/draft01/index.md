@@ -95,7 +95,7 @@ If the `ClientRequest` Message contains requests for Products which a Service do
 
 Otherwise, the Broker SHALL respond with an HTTP Status of 200 and a [`BrokerResponse`](#4-4-5-brokerresponse) Message as the body. Each member of the `BrokerResponse` Message corresponds to one of the requests from the `ClientRequest` Message. No particular order is enforced; a Client MUST be able to handle a `BrokerResponse` Message whose elements have a different order from the requests in the `ClientRequest` Message.
 
-When a Service responds to the Broker with an HTTP Status of 200, the corresponding BrokerSingleResponse MUST be a `BrokerProductResponse`. Conversely, when the Service responds to the Broker with a [`ServiceError`](#5-5-5-serviceerror), the BrokerSingleResponse MUST be a `BrokerErrorResponse`. If another error occurs while retrieving the Product, the BrokerSingleResponse MUST be a `BrokerErrorResponse`. The `value` field SHOULD state that the error came from the Broker rather than the Service.
+When a Service responds to the Broker with an HTTP Status of 200, the corresponding BrokerSingleResponse MUST be a `BrokerProductResponse`. Conversely, when the Service responds to the Broker with a [`ServiceError`](#5-5-4-serviceerror), the BrokerSingleResponse MUST be a `BrokerErrorResponse`. If another error occurs while retrieving the Product, the BrokerSingleResponse MUST be a `BrokerErrorResponse`. The `value` field SHOULD state that the error came from the Broker rather than the Service.
 
 ## 4.4. Client Protocol Messages
 
@@ -141,17 +141,16 @@ If the Service is unable to create the requested Product from the Products prese
 
 If the Service encounters some other error, the Service MUST respond with an HTTP Status of 500 and a `ServiceError` Message using the `ServiceErrorOther` variant as the body.
 
-Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`ServiceProduct`](#5-5-6-serviceproduct) Message containing the requested Product as the Body.
+Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`ServiceProduct`](#5-5-5-serviceproduct) Message containing the requested Product as the Body.
 
 ## 5.4. Service Protocol Messages
 
 {{% draft01-message 5 5 1 ServiceBrokerNegotiation %}}
 {{% draft01-message 5 5 2 ServiceNegotiation %}}
 {{% draft01-message 5 5 3 BrokerRequest %}}
-{{% draft01-message 5 5 4 ProductIdentifier %}}
-{{% draft01-message 5 5 5 ServiceError %}}
-{{% draft01-message 5 5 6 ServiceProduct %}}
-{{% draft01-message 5 5 7 ServiceNotice %}}
+{{% draft01-message 5 5 4 ServiceError %}}
+{{% draft01-message 5 5 5 ServiceProduct %}}
+{{% draft01-message 5 5 6 ServiceNotice %}}
 
 ## 5.5. Optimizations
 
