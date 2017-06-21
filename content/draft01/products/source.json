@@ -3,6 +3,5 @@
 	"title": "source",
 	"description": "Source code.",
 
-	"type": "string",
-	"items": { "type": "object" }
+	"type": "string"
 }
