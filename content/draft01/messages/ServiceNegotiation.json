@@ -7,8 +7,8 @@
 	"properties": {
 		"monto": { "$ref": "MontoVersion.json#" },
 		"service": {
-			"title": "ClientVersion",
-			"description": "The implementation and version of the Client.",
+			"title": "ServiceVersion",
+			"description": "The implementation and version of the Service.",
 
 			"type": "object",
 			"properties": {
