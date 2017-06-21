@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-06/schema#",
-	"title": "ServiceError",
-	"description": "An error encountered by a Service.",
+	"title": "ServiceErrors",
+	"description": "Errors encountered by a Service.",
 
 	"type": "object",
 	"properties": {

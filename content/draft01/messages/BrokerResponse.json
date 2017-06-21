@@ -16,7 +16,7 @@
 				"type": "object",
 				"properties": {
 					"type": { "const": "error" },
-					"value": { "$ref": "ServiceError.json#" }
+					"value": { "$ref": "ServiceErrors.json#" }
 				},
 				"required": ["type", "value"],
 				"additionalProperties": false
