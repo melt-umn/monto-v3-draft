@@ -39,8 +39,8 @@
 	
 					"type": "object",
 					"properties": {
-						"type": { "const": "product" },
-						"value": { "$ref": "Product.json#" }
+						"type": { "const": "other" },
+						"value": { "type": "string" }
 					},
 					"required": ["type", "value"],
 					"additionalProperties": false
