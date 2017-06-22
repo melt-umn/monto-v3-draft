@@ -106,28 +106,28 @@ If the HTTP Status is not 200 or the Client and Broker are not compatible as det
 Compatibility between versions of the Client Protocol SHALL be determined using the Semantic Versioning rules.
 Additionally, a Client MAY reject a Broker that is known to not follow this specification correctly, and vice versa.
 
-If the intersection of the `extensions` field of the `ClientNegotiation` and `ClientBrokerNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker.
+All further requests to the Broker MUST have a `Monto-Version` HTTP header with the version of the Client Protocol negotiated stored as a `MAJOR.MINOR.PATCH` string.
+For example, to declare that version 3.0.0 of the Client Protocol is in use, the header `Monto-Version: 3.0.0` would be sent.
+
+If the intersection of the `extensions` field of the [`ClientNegotiation`](#4-5-1-clientnegotiation) and [`ClientBrokerNegotiation`](#4-5-2-clientbrokernegotiation) Messages is nonempty, the corresponding extensions SHALL be considered to be enabled by both the Client and the Broker.
 The semantics of an extension being enabled are left to that extension.
 All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-6-client-protocol-extensions) section below.
 
 If a non-zero number of extensions are enabled, all requests from the Client to the Broker and all responses from the Broker to the Client MUST have `Monto-Extension` HTTP headers for each extension.
 For example, if the extensions `com.acme/foo` and `org.example/bar` are enabled, the headers `Monto-Extension: com.acme/foo` and `Monto-Extension: org.example/bar` would be sent.
 
-All further requests to the Broker MUST have a `Monto-Version` HTTP header with the version of the Client Protocol negotiated stored as a `MAJOR.MINOR.PATCH` string.
-For example, to declare that version 3.0.0 of the Client Protocol is in use, the header `Monto-Version: 3.0.0` would be sent.
-
 ## 4.3. Sending Products
 
 When the user makes a change to a file that is not reflected by the file system, the Client SHOULD send the corresponding Product to the Broker.
 
 To send a Product from the Client to the Broker, the Client SHALL make a PUT request to the `/monto/broker/[product-type]` path, where `[product-type]` corresponds to the type of Product being sent.
-This is usually `source` for a typical editor.
+This is usually [`source`](#6-4-source) for a typical editor, although structural editors may send a different product type.
 Additionally, the query string portion of the request URI MUST have a `path` key whose value is the path of the file that was sent.
 A Client that knows the language the file is in SHOULD also add a `language` key whose value is the language of the file.
 
 The body of the request SHALL be the Product being sent, with a `Content-Type` of `application/json`.
-As a special case, if the Product being sent is a `source` Product, the `Content-Type` MAY be `text/plain`.
-In that case, the body of the request SHALL be the literal content of the `source` Product, and MUST be encoded in UTF-8 {{% ref rfc3629 %}}.
+As a special case, if the Product being sent is a [`source`](#6-4-source) Product, the `Content-Type` MAY be `text/plain`.
+In that case, the body of the request SHALL be the literal content of the [`source`](#6-4-source) Product.
 
 If the `language` query parameter is not present, the Broker SHOULD attempt to detect it.
 If it cannot be detected, the Broker MUST respond with an HTTP Status of 400 and a [`BrokerPutError`](#4-5-3-brokerputerror) Message with the `no_language` type as the body.
@@ -140,12 +140,12 @@ Additionally, the query string portion of the request URI MUST have `path` and `
 
 If the Service given by `[service-id]` does not exist, the Broker SHALL respond with an HTTP Status of 400 and a [`BrokerGetError`](#4-5-4-brokergeterror) Message with the `no_such_service` type as the body.
 
-If the Product named by `[product-type]` is not exposed by the Service given by `[service-id]`, the Broker SHALL respond with an HTTP Status of 400 and a `BrokerGetError` Message with the `no_such_product` type as the body.
+If the Product named by `[product-type]` is not exposed by the Service given by `[service-id]`, the Broker SHALL respond with an HTTP Status of 400 and a [`BrokerGetError`](#4-5-4-brokergeterror) Message with the `no_such_product` type as the body.
 
 If the Product can be successfully computed, the Broker MUST respond with an HTTP Status of 200 and the Product as the body.
-If the Product cannot be computed due to an error from a Service, the Broker MUST respond with an HTTP Status of 502 and a `BrokerGetError` Message with the `service_error` type as the body.
-If the Product cannot be computed due to an error when connecting to a Service, the Broker MUST respond with an HTTP Status of 502 and a `BrokerGetError` Message with the `service_connect_error` type as the body.
-If the Product cannot be computed due to an internal error, the Broker MUST respond with an HTTP Status of 500 and a `BrokerGetError` Message as the body.
+If the Product cannot be computed due to an error from a Service, the Broker MUST respond with an HTTP Status of 502 and a [`BrokerGetError`](#4-5-4-brokergeterror) Message with the `service_error` type as the body.
+If the Product cannot be computed due to an error when connecting to a Service, the Broker MUST respond with an HTTP Status of 502 and a [`BrokerGetError`](#4-5-4-brokergeterror) Message with the `service_connect_error` type as the body.
+If the Product cannot be computed due to an internal error, the Broker MUST respond with an HTTP Status of 500 and a [`BrokerGetError`](#4-5-4-brokergeterror) Message as the body.
 
 ## 4.5. Client Protocol Messages
 
@@ -332,10 +332,6 @@ Furuhashi, S., "MessagePack: It's like JSON, but fast and small.", [https://msgp
 
 {{< ref-citation rfc2119 >}}
 Bradner, S., "Key words for use in RFCs to Indicate Requirement Levels", [BCP 14](https://tools.ietf.org/html/bcp14), [RFC 2119](https://tools.ietf.org/html/rfc2119), March 1997.
-{{< /ref-citation >}}
-
-{{< ref-citation rfc3629 >}}
-Yergeau, F., "UTF-8, a transformation format of ISO 10646", [RFC 3629](https://tools.ietf.org/html/rfc3629), November 2003.
 {{< /ref-citation >}}
 
 {{< ref-citation rfc7049 >}}

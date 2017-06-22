@@ -4,7 +4,7 @@
 	"description": "The name of a Product.",
 
 	"anyOf": [
-		{ "$ref": "NamespacedName.json#" },
+		{ "$ref": "Identifier.json#" },
 		{
 			"title": "BuiltInProductName",
 			"description": "The name of a Product defined by the specification.",
