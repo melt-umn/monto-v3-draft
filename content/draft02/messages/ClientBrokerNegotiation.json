@@ -24,7 +24,7 @@
 		},
 		"extensions": {
 			"title": "ClientBrokerExtensions",
-			"description": "The Client extensions supported by the Broker.",
+			"description": "The Client Protocol extensions supported by the Broker.",
 
 			"type": "array",
 			"minItems": 1,

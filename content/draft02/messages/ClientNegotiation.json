@@ -24,7 +24,7 @@
 		},
 		"extensions": {
 			"title": "ClientExtensions",
-			"description": "The Client extensions supported by the Client.",
+			"description": "The Client Protocol extensions supported by the Client.",
 
 			"type": "array",
 			"minItems": 1,

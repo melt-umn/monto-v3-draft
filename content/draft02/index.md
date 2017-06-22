@@ -94,9 +94,9 @@ If a Client is using HTTP/1.1, it MAY open multiple connections to the server in
 
 ## 4.2. Version Negotiation
 
-After the HTTP connection is established, the Client SHALL make a POST request to the `/monto/version` path, with a [`ClientNegotiation`](#4-4-1-clientnegotiation) Message as the body.
+After the HTTP connection is established, the Client SHALL make a POST request to the `/monto/version` path, with a [`ClientNegotiation`](#4-5-1-clientnegotiation) Message as the body.
 The Broker SHALL check that it is compatible with the Client.
-The Broker SHALL respond with a [`ClientBrokerNegotiation`](#4-4-2-clientbrokernegotiation) Message.
+The Broker SHALL respond with a [`ClientBrokerNegotiation`](#4-5-2-clientbrokernegotiation) Message.
 If the Broker is compatible with the Client, this response SHALL have an HTTP Status of 200.
 If the Broker determines itself to not be compatible with the Client, the response SHALL instead have an HTTP Status of 400.
 
@@ -108,7 +108,7 @@ Additionally, a Client MAY reject a Broker that is known to not follow this spec
 
 If the intersection of the `extensions` field of the `ClientNegotiation` and `ClientBrokerNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker.
 The semantics of an extension being enabled are left to that extension.
-All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-5-client-protocol-extensions) section below.
+All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-6-client-protocol-extensions) section below.
 
 If a non-zero number of extensions are enabled, all requests from the Client to the Broker and all responses from the Broker to the Client MUST have `Monto-Extension` HTTP headers for each extension.
 For example, if the extensions `com.acme/foo` and `org.example/bar` are enabled, the headers `Monto-Extension: com.acme/foo` and `Monto-Extension: org.example/bar` would be sent.
@@ -130,7 +130,7 @@ As a special case, if the Product being sent is a `source` Product, the `Content
 In that case, the body of the request SHALL be the literal content of the `source` Product, and MUST be encoded in UTF-8 {{% ref rfc3629 %}}.
 
 If the `language` query parameter is not present, the Broker SHOULD attempt to detect it.
-If it cannot be detected, the Broker MUST respond with an HTTP Status of 400 and a [`BrokerPutError`](#todo) Message with `no_language` type as the body.
+If it cannot be detected, the Broker MUST respond with an HTTP Status of 400 and a [`BrokerPutError`](#4-5-3-brokerputerror) Message with the `no_language` type as the body.
 Otherwise, the Broker MUST respond with an HTTP Status of 204 and an empty body.
 
 ## 4.4. Requesting Products
@@ -138,24 +138,27 @@ Otherwise, the Broker MUST respond with an HTTP Status of 204 and an empty body.
 A Client SHALL request Products by making a GET request to the `/monto/[service-id]/[product-type]` path, where `[product-type]` corresponds to the type of of Product being requested.
 Additionally, the query string portion of the request URI MUST have `path` and `language` keys corresponding to the path and language corresponding to the Product being requested.
 
-If the Service given by `[service-id]` does not exist, the Broker SHALL respond with an HTTP Status of 400 and a [`BrokerGetError`](#todo) Message with the `no_such_service` type as the body.
+If the Service given by `[service-id]` does not exist, the Broker SHALL respond with an HTTP Status of 400 and a [`BrokerGetError`](#4-5-4-brokergeterror) Message with the `no_such_service` type as the body.
 
 If the Product named by `[product-type]` is not exposed by the Service given by `[service-id]`, the Broker SHALL respond with an HTTP Status of 400 and a `BrokerGetError` Message with the `no_such_product` type as the body.
 
-TODO
+If the Product can be successfully computed, the Broker MUST respond with an HTTP Status of 200 and the Product as the body.
+If the Product cannot be computed due to an error from a Service, the Broker MUST respond with an HTTP Status of 502 and a `BrokerGetError` Message with the `service_error` type as the body.
+If the Product cannot be computed due to an error when connecting to a Service, the Broker MUST respond with an HTTP Status of 502 and a `BrokerGetError` Message with the `service_connect_error` type as the body.
+If the Product cannot be computed due to an internal error, the Broker MUST respond with an HTTP Status of 500 and a `BrokerGetError` Message as the body.
 
 ## 4.5. Client Protocol Messages
 
 {{% draft02-message 4 5 1 ClientNegotiation %}}
 {{% draft02-message 4 5 2 ClientBrokerNegotiation %}}
-{{% draft02-message 4 5 3 ClientRequest %}}
-{{% draft02-message 4 5 4 ClientSingleRequest %}}
-{{% draft02-message 4 5 5 BrokerResponse %}}
+{{% draft02-message 4 5 3 BrokerPutError %}}
+{{% draft02-message 4 5 4 BrokerGetError %}}
 
 ## 4.6. Client Protocol Extensions
 
 Currently, there are no built-in extensions defined for the Client Protocol.
 However, a Client or Broker MAY support arbitrary extensions whose names are in the form of the [`NamespacedName`](#3-1-3-namespacedname) above.
+These extensions are vendor-specific, and thus not specified here.
 
 # 5. The Service Protocol
 

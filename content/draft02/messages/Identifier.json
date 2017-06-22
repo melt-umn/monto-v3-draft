@@ -1,8 +1,8 @@
 {
 	"$schema": "http://json-schema.org/draft-06/schema#",
 	"title": "Identifier",
-	"description": "A reverse-hostname-style dotted identifier.",
+	"description": "A reverse-hostname-style dotted identifier, which must have at least two components.",
 
 	"type": "string",
-	"pattern": "[a-zA-Z_][a-zA-Z_0-9]*(\\.[a-zA-Z_][a-zA-Z_0-9]*)*"
+	"pattern": "[a-zA-Z_][a-zA-Z_0-9]*(\\.[a-zA-Z_][a-zA-Z_0-9]*)+"
 }

@@ -6,7 +6,7 @@
 	"type": "object",
 	"properties": {
 		"name": { "$ref": "ProductName.json#" },
-		"language": { "$ref": "Identifier.json#" },
+		"language": { "type": "string" },
 		"path": { "type": "string" },
 		"contents": {}
 	},
