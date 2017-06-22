@@ -2,6 +2,11 @@
 title = "Monto Version 3 Specification, Draft 2"
 +++
 
+# TODOs
+
+ - Document configuration
+   - Stateful or stateless config in the client protocol?
+
 # Abstract
 
 This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments {{% ref monto %}}. These improvements allow for simpler implementations for Clients. They also make it feasible to have multiple Clients sharing a single Service, and for Services to be operated over the Internet (rather than on the local network or on a single machine).
@@ -77,35 +82,47 @@ Upon initiating a connection to a Broker, a Client MUST attempt to use an HTTP/2
 
 ## 4.2. Version Negotiation
 
-After the HTTP connection is established, the Client SHALL make a POST request to the `/monto/version` path, with a [`ClientNegotiation`](#4-4-1-clientnegotiation) Message as the body. The Broker SHALL check that it is compatible with the Client. The Broker SHALL respond with a [`ClientBrokerNegotiation`](#4-4-2-clientbrokernegotiation) Message. If the Broker is compatible with the Client, this response SHALL have an HTTP Status of 200. If the Broker and Client are not compatible, the response SHALL instead have an HTTP Status of 409.
+After the HTTP connection is established, the Client SHALL make a POST request to the `/monto/version` path, with a [`ClientNegotiation`](#4-4-1-clientnegotiation) Message as the body. The Broker SHALL check that it is compatible with the Client. The Broker SHALL respond with a [`ClientBrokerNegotiation`](#4-4-2-clientbrokernegotiation) Message. If the Broker is compatible with the Client, this response SHALL have an HTTP Status of 200. If the Broker determines itself to not be compatible with the Client, the response SHALL instead have an HTTP Status of 400.
 
-If the HTTP Status is 200, the Client SHALL check that it is compatible with the Broker. If the HTTP Status is not 200 or the Client and Broker are not compatible as determined by the Client, the Client SHOULD inform the user and MUST close the connection.
+If the HTTP Status is 200, the Client SHALL check that it is compatible with the Broker. If the HTTP Status is not 200 or the Client and Broker are not compatible as determined by the Client, the Client SHOULD inform the user and MUST not attempt further interaction.
 
 Compatibility between versions of the Client Protocol SHALL be determined using the Semantic Versioning rules. Additionally, a Client MAY reject a Broker that is known to not follow this specification correctly, and vice versa.
 
 If the intersection of the `extensions` field of the `ClientNegotiation` and `ClientBrokerNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker. The semantics of an extension being enabled are left to that extension. All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-5-client-protocol-extensions) section below.
 
-If a non-zero number of extensions are enabled, all requests from the Client to the Broker and all responses from the Broker to the Client MUST have a `Monto-Extensions` HTTP header with a space-separated list of the enabled extensions, sorted lexicographically. For example, if the extensions `com.acme/foo` and `org.example/bar` are enabled, the header would read `Monto-Extensions: com.acme/foo org.example/bar`. The header MAY be present with an empty value when no extensions are enabled.
- 
-## 4.3. Requesting Products
+If a non-zero number of extensions are enabled, all requests from the Client to the Broker and all responses from the Broker to the Client MUST have `Monto-Extension` HTTP headers for each extension.. For example, if the extensions `com.acme/foo` and `org.example/bar` are enabled, the headers `Monto-Extension: com.acme/foo` and `Monto-Extension: org.example/bar` would be sent.
 
-A Client SHALL request Products by making a POST request to the `/monto/products` path, with a [`ClientRequest`](#4-4-3-clientrequest) Message as the body.
+All further requests to the Broker MUST have a `Monto-Version` HTTP header with the version of the Client Protocol negotiated stored as a `MAJOR.MINOR.PATCH` string. For example, to declare that version 3.0.0 of the Client Protocol is in use, the header `Monto-Version: 3.0.0` would be sent.
 
-If the `ClientRequest` Message contains requests for Products which a Service does not expose, or a request for Products from a Service that does not exist, the Broker SHALL respond with an HTTP Status of 400 and the [`ClientSingleRequest`](#4-4-4-clientsinglerequest) Message corresponding to the illegal request as the body.
+## 4.3. Sending Products
 
-Otherwise, the Broker SHALL respond with an HTTP Status of 200 and a [`BrokerResponse`](#4-4-5-brokerresponse) Message as the body. Each member of the `BrokerResponse` Message corresponds to one of the requests from the `ClientRequest` Message. No particular order is enforced; a Client MUST be able to handle a `BrokerResponse` Message whose elements have a different order from the requests in the `ClientRequest` Message.
+When the user makes a change to a file that is not reflected by the file system, the Client SHOULD send the corresponding Product to the Broker.
 
-When a Service responds to the Broker with an HTTP Status of 200, the corresponding BrokerSingleResponse MUST be a `BrokerProductResponse`. Conversely, when the Service responds to the Broker with a [`ServiceErrors`](#5-4-4-serviceerrors), the BrokerSingleResponse MUST be a `BrokerErrorResponse`. If another error occurs while retrieving the Product, the BrokerSingleResponse MUST be a `BrokerErrorResponse`. The `value` field SHOULD state that the error came from the Broker rather than the Service.
+To send a Product from the Client to the Broker, the Client SHALL make a PUT request to the `/monto/broker/[product-type]` path, where `[product-type]` corresponds to the type of Product being sent. This is usually `source` for a typical editor. Additionally, the query string portion of the request URI MUST have a `path` key whose value is the path of the file that was sent. A Client that knows the language the file is in SHOULD also add a `language` key whose value is the language of the file.
 
-## 4.4. Client Protocol Messages
+The body of the request SHALL be the Product being sent, with a `Content-Type` of `application/json`. As a special case, if the Product being sent is a `source` Product, the `Content-Type` MAY be `text/plain`. In that case, the body of the request SHALL be the literal content of the `source` Product, and MUST be encoded in UTF-8 {{% ref rfc3629 %}}.
 
-{{% draft02-message 4 4 1 ClientNegotiation %}}
-{{% draft02-message 4 4 2 ClientBrokerNegotiation %}}
-{{% draft02-message 4 4 3 ClientRequest %}}
-{{% draft02-message 4 4 4 ClientSingleRequest %}}
-{{% draft02-message 4 4 5 BrokerResponse %}}
+If the `language` query parameter is not present, the Broker SHOULD attempt to detect it. If it cannot be detected, the Broker MUST respond with an HTTP Status of 400 and a [`BrokerPutError`](#todo) Message with `no_language` type as the body. Otherwise, the Broker MUST respond with an HTTP Status of 204 and an empty body.
 
-## 4.5. Client Protocol Extensions
+## 4.4. Requesting Products
+
+A Client SHALL request Products by making a GET request to the `/monto/[service-id]/[product-type]` path, where `[product-type]` corresponds to the type of of Product being requested. Additionally, the query string portion of the request URI MUST have `path` and `language` keys corresponding to the path and language corresponding to the Product being requested.
+
+If the Service given by `[service-id]` does not exist, the Broker SHALL respond with an HTTP Status of 400 and a [`BrokerGetError`](#todo) Message with the `no_such_service` type as the body.
+
+If the Product named by `[product-type]` is not exposed by the Service given by `[service-id]`, the Broker SHALL respond with an HTTP Status of 400 and a `BrokerGetError` Message with the `no_such_product` type as the body.
+
+TODO
+
+## 4.5. Client Protocol Messages
+
+{{% draft02-message 4 5 1 ClientNegotiation %}}
+{{% draft02-message 4 5 2 ClientBrokerNegotiation %}}
+{{% draft02-message 4 5 3 ClientRequest %}}
+{{% draft02-message 4 5 4 ClientSingleRequest %}}
+{{% draft02-message 4 5 5 BrokerResponse %}}
+
+## 4.6. Client Protocol Extensions
 
 Currently, there are no built-in extensions defined for the Client Protocol. However, a Client or Broker MAY support arbitrary extensions whose names are in the form of the [`NamespacedName`](#3-1-3-namespacedname) above.
 
@@ -245,6 +262,10 @@ Furuhashi, S., "MessagePack: It's like JSON, but fast and small.", [https://msgp
 
 {{< ref-citation rfc2119 >}}
 Bradner, S., "Key words for use in RFCs to Indicate Requirement Levels", [BCP 14](https://tools.ietf.org/html/bcp14), [RFC 2119](https://tools.ietf.org/html/rfc2119), March 1997.
+{{< /ref-citation >}}
+
+{{< ref-citation rfc3629 >}}
+Yergeau, F., "UTF-8, a transformation format of ISO 10646", [RFC 3629](https://tools.ietf.org/html/rfc3629), November 2003.
 {{< /ref-citation >}}
 
 {{< ref-citation rfc7049 >}}
