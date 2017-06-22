@@ -72,11 +72,12 @@ Messages are documented with JSON Schema {{% ref jsonschema %}}.
 The schemas are also present in the "schemas" directory, which should accompany this document.
 
 {{% draft02-message 3 1 1 Identifier %}}
-{{% draft02-message 3 1 2 MontoVersion %}}
-{{% draft02-message 3 1 3 NamespacedName %}}
-{{% draft02-message 3 1 4 Product %}}
-{{% draft02-message 3 1 5 ProductIdentifier %}}
-{{% draft02-message 3 1 6 ProductName %}}
+{{% draft02-message 3 1 2 NamespacedName %}}
+{{% draft02-message 3 1 3 Product %}}
+{{% draft02-message 3 1 4 ProductIdentifier %}}
+{{% draft02-message 3 1 5 ProductName %}}
+{{% draft02-message 3 1 6 ProtocolVersion %}}
+{{% draft02-message 3 1 7 SoftwareVersion %}}
 
 # 4. The Client Protocol
 
@@ -157,7 +158,7 @@ If the Product cannot be computed due to an internal error, the Broker MUST resp
 ## 4.6. Client Protocol Extensions
 
 Currently, there are no built-in extensions defined for the Client Protocol.
-However, a Client or Broker MAY support arbitrary extensions whose names are in the form of the [`NamespacedName`](#3-1-3-namespacedname) above.
+However, a Client or Broker MAY support arbitrary extensions whose names are in the form of the [`NamespacedName`](#3-1-2-namespacedname) above.
 These extensions are vendor-specific, and thus not specified here.
 
 # 5. The Service Protocol

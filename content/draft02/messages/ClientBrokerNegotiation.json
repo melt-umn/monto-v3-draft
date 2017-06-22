@@ -5,23 +5,8 @@
 
 	"type": "object",
 	"properties": {
-		"monto": { "$ref": "MontoVersion.json#" },
-		"broker": {
-			"title": "BrokerVersion",
-			"description": "The implementation and version of the Broker.",
-
-			"type": "object",
-			"properties": {
-				"id": { "$ref": "Identifier.json#" },
-				"name": { "type": "string" },
-				"vendor": { "type": "string" },
-				"major": { "type": "integer" },
-				"minor": { "type": "integer" },
-				"patch": { "type": "integer" }
-			},
-			"additionalProperties": false,
-			"required": ["id"]
-		},
+		"monto": { "$ref": "ProtocolVersion.json#" },
+		"broker": { "$ref": "SoftwareVersion.json#" },
 		"extensions": {
 			"title": "ClientBrokerExtensions",
 			"description": "The Client Protocol extensions supported by the Broker.",

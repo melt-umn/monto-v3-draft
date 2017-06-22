@@ -5,23 +5,8 @@
 
 	"type": "object",
 	"properties": {
-		"monto": { "$ref": "MontoVersion.json#" },
-		"service": {
-			"title": "ServiceVersion",
-			"description": "The implementation and version of the Service.",
-
-			"type": "object",
-			"properties": {
-				"id": { "$ref": "Identifier.json#" },
-				"name": { "type": "string" },
-				"vendor": { "type": "string" },
-				"major": { "type": "integer" },
-				"minor": { "type": "integer" },
-				"patch": { "type": "integer" }
-			},
-			"additionalProperties": false,
-			"required": ["id"]
-		},
+		"monto": { "$ref": "ProtocolVersion.json#" },
+		"service": { "$ref": "SoftwareVersion.json#" },
 		"extensions": {
 			"title": "ServiceExtensions",
 			"description": "The Service extensions supported by the Service.",

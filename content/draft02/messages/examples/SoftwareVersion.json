@@ -1,0 +1,8 @@
+{
+	"id": "com.acme.foo",
+	"name": "Foo Client",
+	"vendor": "ACME Inc.",
+	"major": 0,
+	"minor": 1,
+	"patch": 0
+}

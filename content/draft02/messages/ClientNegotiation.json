@@ -5,23 +5,8 @@
 
 	"type": "object",
 	"properties": {
-		"monto": { "$ref": "MontoVersion.json#" },
-		"client": {
-			"title": "ClientVersion",
-			"description": "The implementation and version of the Client.",
-
-			"type": "object",
-			"properties": {
-				"id": { "$ref": "Identifier.json#" },
-				"name": { "type": "string" },
-				"vendor": { "type": "string" },
-				"major": { "type": "integer" },
-				"minor": { "type": "integer" },
-				"patch": { "type": "integer" }
-			},
-			"additionalProperties": false,
-			"required": ["id"]
-		},
+		"monto": { "$ref": "ProtocolVersion.json#" },
+		"client": { "$ref": "SoftwareVersion.json#" },
 		"extensions": {
 			"title": "ClientExtensions",
 			"description": "The Client Protocol extensions supported by the Client.",

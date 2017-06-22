@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-06/schema#",
-	"title": "MontoVersion",
-	"description": "The version number of the Monto protocol.",
+	"title": "ProtocolVersion",
+	"description": "The version number of the Client or Service protocol.",
 
 	"type": "object",
 	"properties": {
