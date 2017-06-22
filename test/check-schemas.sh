@@ -17,3 +17,5 @@ command -v jv >/dev/null || go get -u github.com/santhosh-tekuri/jsonschema/cmd/
 
 testDir draft01/messages
 testDir draft01/products
+testDir draft02/messages
+testDir draft02/products

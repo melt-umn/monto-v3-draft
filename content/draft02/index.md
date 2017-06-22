@@ -1,5 +1,5 @@
 +++
-title = "Monto Version 3 Specification, Draft 1"
+title = "Monto Version 3 Specification, Draft 2"
 +++
 
 # Abstract
@@ -58,12 +58,12 @@ Messages are documented with JSON Schema {{% ref jsonschema %}}.
 
 The schemas are also present in the "schemas" directory, which should accompany this document.
 
-{{% draft01-message 3 1 1 Identifier %}}
-{{% draft01-message 3 1 2 MontoVersion %}}
-{{% draft01-message 3 1 3 NamespacedName %}}
-{{% draft01-message 3 1 4 Product %}}
-{{% draft01-message 3 1 5 ProductIdentifier %}}
-{{% draft01-message 3 1 6 ProductName %}}
+{{% draft02-message 3 1 1 Identifier %}}
+{{% draft02-message 3 1 2 MontoVersion %}}
+{{% draft02-message 3 1 3 NamespacedName %}}
+{{% draft02-message 3 1 4 Product %}}
+{{% draft02-message 3 1 5 ProductIdentifier %}}
+{{% draft02-message 3 1 6 ProductName %}}
 
 # 4. The Client Protocol
 
@@ -99,11 +99,11 @@ When a Service responds to the Broker with an HTTP Status of 200, the correspond
 
 ## 4.4. Client Protocol Messages
 
-{{% draft01-message 4 4 1 ClientNegotiation %}}
-{{% draft01-message 4 4 2 ClientBrokerNegotiation %}}
-{{% draft01-message 4 4 3 ClientRequest %}}
-{{% draft01-message 4 4 4 ClientSingleRequest %}}
-{{% draft01-message 4 4 5 BrokerResponse %}}
+{{% draft02-message 4 4 1 ClientNegotiation %}}
+{{% draft02-message 4 4 2 ClientBrokerNegotiation %}}
+{{% draft02-message 4 4 3 ClientRequest %}}
+{{% draft02-message 4 4 4 ClientSingleRequest %}}
+{{% draft02-message 4 4 5 BrokerResponse %}}
 
 ## 4.5. Client Protocol Extensions
 
@@ -145,12 +145,12 @@ Otherwise, the Service MUST respond with an HTTP Status of 200 and a [`ServicePr
 
 ## 5.4. Service Protocol Messages
 
-{{% draft01-message 5 4 1 ServiceBrokerNegotiation %}}
-{{% draft01-message 5 4 2 ServiceNegotiation %}}
-{{% draft01-message 5 4 3 BrokerRequest %}}
-{{% draft01-message 5 4 4 ServiceErrors %}}
-{{% draft01-message 5 4 5 ServiceProduct %}}
-{{% draft01-message 5 4 6 ServiceNotice %}}
+{{% draft02-message 5 4 1 ServiceBrokerNegotiation %}}
+{{% draft02-message 5 4 2 ServiceNegotiation %}}
+{{% draft02-message 5 4 3 BrokerRequest %}}
+{{% draft02-message 5 4 4 ServiceErrors %}}
+{{% draft02-message 5 4 5 ServiceProduct %}}
+{{% draft02-message 5 4 6 ServiceNotice %}}
 
 ## 5.5. Optimizations
 
@@ -164,18 +164,6 @@ Typically, a source file's current dependencies are very similar to its past dep
 
 The semantics specified here intentionally do not specify in what order the Broker should query Services to obtain a Product. This allows a Broker to attempt to infer the dependencies a particular Product will have. Although no heuristics are described here, they could in principle be developed and applied.
 
-### 5.5.3. Caching Products
-
-Most projects' dependencies contains more source code than the projects themselves -- the dependencies' source code is unlikely to change, and it is wasteful to send it over the network with each request. A simple Service Protocol Extension that remedies this problem would be a caching mechanism, in which the Broker would send an opaque identifier (e.g. a SHA-256 hash) for the dependencies instead of the dependencies themselves. A Service could then either use a cached copy, if one exists, or fail with an error similar to the `ServiceErrorUnmetDependency` error if the dependency is not in the cache.
-
-### 5.5.4. Incremental Product Transfer
-
-The next step on the above would be to send all changes to files as deltas from a previous state. This would greatly decrease the amount of network bandwidth required, and would be a relatively minor variation on the above.
-
-### 5.5.5. Incremental Compilation
-
-Once an incremental transfer system exists, full incremental compilation is easy to support. A Service would only have to cache the last Product cooresponding to the input, and then could use it in the next compilation for that Product.
-
 ## 5.6. Service Protocol Extensions
 
 Currently, there are no built-in extensions defined for the Service Protocol. However, a Broker or Service MAY support arbitrary extensions whose names are in the form of the `NamespacedName` above.
@@ -184,10 +172,10 @@ Currently, there are no built-in extensions defined for the Service Protocol. Ho
 
 Some fields are in common between most Product types. The main two are `startByte` and `endByte`. They represent the start and end of a selection of text from the corresponding source code. `startByte` is inclusive, while `endByte` is exclusive. The usage of "byte" in their names is significant -- these MUST be the the byte indexes, rather than the character indexes.
 
-{{% draft01-product 6 1 directory %}}
-{{% draft01-product 6 2 errors %}}
-{{% draft01-product 6 3 highlighting %}}
-{{% draft01-product 6 4 source %}}
+{{% draft02-product 6 1 directory %}}
+{{% draft02-product 6 2 errors %}}
+{{% draft02-product 6 3 highlighting %}}
+{{% draft02-product 6 4 source %}}
 
 # 7. Security Considerations
 
@@ -218,6 +206,18 @@ Previous versions of Monto supported arbitrary commands being run by the Service
 ## 8.4. Stateful Services
 
 Some services inherently have state, such as debuggers. Unfortunately, this model does not translate well to the Monto Version 3 Protocol -- services may be shared with multiple brokers over the network. A possible solution would be to use a "state token," a unique identifier for each session.
+
+## 8.5. Caching Products
+
+Most projects' dependencies contains more source code than the projects themselves -- the dependencies' source code is unlikely to change, and it is wasteful to send it over the network with each request. A simple Service Protocol Extension that remedies this problem would be a caching mechanism, in which the Broker would send an opaque identifier (e.g. a SHA-256 hash) for the dependencies instead of the dependencies themselves. A Service could then either use a cached copy, if one exists, or fail with an error similar to the `ServiceErrorUnmetDependency` error if the dependency is not in the cache.
+
+## 8.6. Incremental Product Transfer
+
+The next step on the above would be to send all changes to files as deltas from a previous state. This would greatly decrease the amount of network bandwidth required, and would be a relatively minor variation on the above.
+
+## 8.7. Incremental Compilation
+
+Once an incremental transfer system exists, full incremental compilation is easy to support. A Service would only have to cache the last Product cooresponding to the input, and then could use it in the next compilation for that Product.
 
 # 9. References
 

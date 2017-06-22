@@ -1,0 +1,17 @@
+[
+	{
+		"name": "foo.c",
+		"absolutePath": "/projects/bar/foo.c",
+		"type": "file"
+	},
+	{
+		"name": "bar.c",
+		"absolutePath": "/projects/bar/bar.c",
+		"type": "file"
+	},
+	{
+		"name": "quux",
+		"absolutePath": "/projects/bar/quux",
+		"type": "directory"
+	}
+]

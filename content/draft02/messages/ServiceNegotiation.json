@@ -1,0 +1,45 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "ServiceNegotiation",
+	"description": "The Message that a Service sends to a Broker during version negotiation.",
+
+	"type": "object",
+	"properties": {
+		"monto": { "$ref": "MontoVersion.json#" },
+		"service": {
+			"title": "ServiceVersion",
+			"description": "The implementation and version of the Service.",
+
+			"type": "object",
+			"properties": {
+				"id": { "$ref": "Identifier.json#" },
+				"name": { "type": "string" },
+				"vendor": { "type": "string" },
+				"major": { "type": "integer" },
+				"minor": { "type": "integer" },
+				"patch": { "type": "integer" }
+			},
+			"additionalProperties": false,
+			"required": ["id"]
+		},
+		"extensions": {
+			"title": "ServiceExtensions",
+			"description": "The Service extensions supported by the Service.",
+
+			"type": "array",
+			"minItems": 1,
+			"items": { "$ref": "NamespacedName.json#" },
+			"uniqueItems": true
+		},
+		"products": {
+			"title": "BrokerProductList",
+			"description": "The Products a Service can produce.",
+
+			"type": "array",
+			"items": { "$ref": "ProductIdentifier.json#" },
+			"uniqueItems": true
+		}
+	},
+	"additionalProperties": false,
+	"required": ["monto", "service", "products"]
+}

@@ -1,0 +1,7 @@
+{
+	"product": {
+		"name": "errors",
+		"language": "python"
+	},
+	"service": "com.acme.quux"
+}
