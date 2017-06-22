@@ -9,7 +9,9 @@ title = "Monto Version 3 Specification, Draft 2"
 
 # Abstract
 
-This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments {{% ref monto %}}. These improvements allow for simpler implementations for Clients. They also make it feasible to have multiple Clients sharing a single Service, and for Services to be operated over the Internet (rather than on the local network or on a single machine).
+This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments {{% ref monto %}}.
+These improvements allow for simpler implementations for Clients.
+They also make it feasible to have multiple Clients sharing a single Service, and for Services to be operated over the Internet (rather than on the local network or on a single machine).
 
 # 1. Conventions and Terminology
 
@@ -43,15 +45,21 @@ Monto Protocols
 
 # 2. Introduction
 
-Monto makes it easy to interface the information provided by a language's compiler with various editors, without the compiler developer needing to implement language support for each editor. Unfortunately, the native APIs of various popular editors vary widely with respect to how well they support the features required by Monto, namely the ability to bind to ØMQ {{% ref zeromq %}} and the relatively large amount of client-side "bookkeeping" to be done.
+Monto makes it easy to interface the information provided by a language's compiler with various editors, without the compiler developer needing to implement language support for each editor.
+Unfortunately, the native APIs of various popular editors vary widely with respect to how well they support the features required by Monto, namely the ability to bind to ØMQ {{% ref zeromq %}} and the relatively large amount of client-side "bookkeeping" to be done.
 
-This document suggests changes to the Monto Protocols which are focused on removing the ZeroMQ requirement and simplifying the protocol that the client has to support as much as possible. As these changes are not backwards compatible with existing Clients and Services, these changes are collectively known as Monto Version 3.
+This document suggests changes to the Monto Protocols which are focused on removing the ZeroMQ requirement and simplifying the protocol that the client has to support as much as possible.
+As these changes are not backwards compatible with existing Clients and Services, these changes are collectively known as Monto Version 3.
 
 # 3. Protocol Overview
 
-The Monto Protocols are built on top of HTTP/2 {{% ref rfc7540 %}}, with each request being a POST request to a special Monto endpoint. Both request and response bodies are JSON {{% ref rfc7159 %}}. This allows for the reuse of the many technologies that are capable of debugging this relatively common protocol combination, such as mitmproxy {{% ref mitmproxy %}}, Postman {{% ref postman %}}, and others. Furthermore, almost every mainstream programming language supports HTTP and JSON, meaning the wide variety of client programming languages (e.g. CoffeeScript, Emacs Lisp, Java, Python, etc.) can all interoperate with it.
+The Monto Protocols are built on top of HTTP/2 {{% ref rfc7540 %}}, with each request being a POST request to a special Monto endpoint.
+Both request and response bodies are JSON {{% ref rfc7159 %}}.
+This allows for the reuse of the many technologies that are capable of debugging this relatively common protocol combination, such as mitmproxy {{% ref mitmproxy %}}, Postman {{% ref postman %}}, and others.
+Furthermore, almost every mainstream programming language supports HTTP and JSON, meaning the wide variety of client programming languages (e.g. CoffeeScript, Emacs Lisp, Java, Python, etc.) can all interoperate with it.
 
-Both the Client Protocol and Service Protocol are versioned according to Semantic Versioning {{% ref semver %}}. This document describes Client Protocol version 3.0.0 and Service Protocol version 3.0.0.
+Both the Client Protocol and Service Protocol are versioned according to Semantic Versioning {{% ref semver %}}.
+This document describes Client Protocol version 3.0.0 and Service Protocol version 3.0.0.
 
 Unless specified otherwise, a Message is serialized as JSON and sent with a Content-Type of `application/json`.
 
@@ -76,37 +84,59 @@ The Client Protocol dictates communication between Clients and Brokers.
 
 ## 4.1. Connection Initiation
 
-A Client SHALL initiate a connection to a Broker either when it starts, or when Monto capabilities are requested. Although Monto can operate over connections on any port, Clients SHOULD default to connecting to port 28888 on the current machine, and Brokers SHOULD default to serving on that port. Clients and Brokers SHOULD be able to connect to and serve on other ports, if configured to do so.
+A Client SHALL initiate a connection to a Broker either when it starts, or when Monto capabilities are requested.
+Although Monto can operate over connections on any port, Clients SHOULD default to connecting to port 28888 on the current machine, and Brokers SHOULD default to serving on that port.
+Clients and Brokers SHOULD be able to connect to and serve on other ports, if configured to do so.
 
-Upon initiating a connection to a Broker, a Client MUST attempt to use an HTTP/2 connection if the Client supports HTTP/2. If the Client does not, it SHALL use the same protocol, but over HTTP/1.1 {{% ref rfc7230 %}} instead. If a Client is using HTTP/1.1, it MAY open multiple connections to the server in order to have multiple requests "in flight" at the same time.
+Upon initiating a connection to a Broker, a Client MUST attempt to use an HTTP/2 connection if the Client supports HTTP/2.
+If the Client does not, it SHALL use the same protocol, but over HTTP/1.1 {{% ref rfc7230 %}} instead.
+If a Client is using HTTP/1.1, it MAY open multiple connections to the server in order to have multiple requests "in flight" at the same time.
 
 ## 4.2. Version Negotiation
 
-After the HTTP connection is established, the Client SHALL make a POST request to the `/monto/version` path, with a [`ClientNegotiation`](#4-4-1-clientnegotiation) Message as the body. The Broker SHALL check that it is compatible with the Client. The Broker SHALL respond with a [`ClientBrokerNegotiation`](#4-4-2-clientbrokernegotiation) Message. If the Broker is compatible with the Client, this response SHALL have an HTTP Status of 200. If the Broker determines itself to not be compatible with the Client, the response SHALL instead have an HTTP Status of 400.
+After the HTTP connection is established, the Client SHALL make a POST request to the `/monto/version` path, with a [`ClientNegotiation`](#4-4-1-clientnegotiation) Message as the body.
+The Broker SHALL check that it is compatible with the Client.
+The Broker SHALL respond with a [`ClientBrokerNegotiation`](#4-4-2-clientbrokernegotiation) Message.
+If the Broker is compatible with the Client, this response SHALL have an HTTP Status of 200.
+If the Broker determines itself to not be compatible with the Client, the response SHALL instead have an HTTP Status of 400.
 
-If the HTTP Status is 200, the Client SHALL check that it is compatible with the Broker. If the HTTP Status is not 200 or the Client and Broker are not compatible as determined by the Client, the Client SHOULD inform the user and MUST not attempt further interaction.
+If the HTTP Status is 200, the Client SHALL check that it is compatible with the Broker.
+If the HTTP Status is not 200 or the Client and Broker are not compatible as determined by the Client, the Client SHOULD inform the user and MUST not attempt further interaction.
 
-Compatibility between versions of the Client Protocol SHALL be determined using the Semantic Versioning rules. Additionally, a Client MAY reject a Broker that is known to not follow this specification correctly, and vice versa.
+Compatibility between versions of the Client Protocol SHALL be determined using the Semantic Versioning rules.
+Additionally, a Client MAY reject a Broker that is known to not follow this specification correctly, and vice versa.
 
-If the intersection of the `extensions` field of the `ClientNegotiation` and `ClientBrokerNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker. The semantics of an extension being enabled are left to that extension. All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-5-client-protocol-extensions) section below.
+If the intersection of the `extensions` field of the `ClientNegotiation` and `ClientBrokerNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker.
+The semantics of an extension being enabled are left to that extension.
+All non-namespaced extensions are documented in the [Client Protocol Extensions](#4-5-client-protocol-extensions) section below.
 
-If a non-zero number of extensions are enabled, all requests from the Client to the Broker and all responses from the Broker to the Client MUST have `Monto-Extension` HTTP headers for each extension.. For example, if the extensions `com.acme/foo` and `org.example/bar` are enabled, the headers `Monto-Extension: com.acme/foo` and `Monto-Extension: org.example/bar` would be sent.
+If a non-zero number of extensions are enabled, all requests from the Client to the Broker and all responses from the Broker to the Client MUST have `Monto-Extension` HTTP headers for each extension.
+For example, if the extensions `com.acme/foo` and `org.example/bar` are enabled, the headers `Monto-Extension: com.acme/foo` and `Monto-Extension: org.example/bar` would be sent.
 
-All further requests to the Broker MUST have a `Monto-Version` HTTP header with the version of the Client Protocol negotiated stored as a `MAJOR.MINOR.PATCH` string. For example, to declare that version 3.0.0 of the Client Protocol is in use, the header `Monto-Version: 3.0.0` would be sent.
+All further requests to the Broker MUST have a `Monto-Version` HTTP header with the version of the Client Protocol negotiated stored as a `MAJOR.MINOR.PATCH` string.
+For example, to declare that version 3.0.0 of the Client Protocol is in use, the header `Monto-Version: 3.0.0` would be sent.
 
 ## 4.3. Sending Products
 
 When the user makes a change to a file that is not reflected by the file system, the Client SHOULD send the corresponding Product to the Broker.
 
-To send a Product from the Client to the Broker, the Client SHALL make a PUT request to the `/monto/broker/[product-type]` path, where `[product-type]` corresponds to the type of Product being sent. This is usually `source` for a typical editor. Additionally, the query string portion of the request URI MUST have a `path` key whose value is the path of the file that was sent. A Client that knows the language the file is in SHOULD also add a `language` key whose value is the language of the file.
+To send a Product from the Client to the Broker, the Client SHALL make a PUT request to the `/monto/broker/[product-type]` path, where `[product-type]` corresponds to the type of Product being sent.
+This is usually `source` for a typical editor.
+Additionally, the query string portion of the request URI MUST have a `path` key whose value is the path of the file that was sent.
+A Client that knows the language the file is in SHOULD also add a `language` key whose value is the language of the file.
 
-The body of the request SHALL be the Product being sent, with a `Content-Type` of `application/json`. As a special case, if the Product being sent is a `source` Product, the `Content-Type` MAY be `text/plain`. In that case, the body of the request SHALL be the literal content of the `source` Product, and MUST be encoded in UTF-8 {{% ref rfc3629 %}}.
+The body of the request SHALL be the Product being sent, with a `Content-Type` of `application/json`.
+As a special case, if the Product being sent is a `source` Product, the `Content-Type` MAY be `text/plain`.
+In that case, the body of the request SHALL be the literal content of the `source` Product, and MUST be encoded in UTF-8 {{% ref rfc3629 %}}.
 
-If the `language` query parameter is not present, the Broker SHOULD attempt to detect it. If it cannot be detected, the Broker MUST respond with an HTTP Status of 400 and a [`BrokerPutError`](#todo) Message with `no_language` type as the body. Otherwise, the Broker MUST respond with an HTTP Status of 204 and an empty body.
+If the `language` query parameter is not present, the Broker SHOULD attempt to detect it.
+If it cannot be detected, the Broker MUST respond with an HTTP Status of 400 and a [`BrokerPutError`](#todo) Message with `no_language` type as the body.
+Otherwise, the Broker MUST respond with an HTTP Status of 204 and an empty body.
 
 ## 4.4. Requesting Products
 
-A Client SHALL request Products by making a GET request to the `/monto/[service-id]/[product-type]` path, where `[product-type]` corresponds to the type of of Product being requested. Additionally, the query string portion of the request URI MUST have `path` and `language` keys corresponding to the path and language corresponding to the Product being requested.
+A Client SHALL request Products by making a GET request to the `/monto/[service-id]/[product-type]` path, where `[product-type]` corresponds to the type of of Product being requested.
+Additionally, the query string portion of the request URI MUST have `path` and `language` keys corresponding to the path and language corresponding to the Product being requested.
 
 If the Service given by `[service-id]` does not exist, the Broker SHALL respond with an HTTP Status of 400 and a [`BrokerGetError`](#todo) Message with the `no_such_service` type as the body.
 
@@ -124,7 +154,8 @@ TODO
 
 ## 4.6. Client Protocol Extensions
 
-Currently, there are no built-in extensions defined for the Client Protocol. However, a Client or Broker MAY support arbitrary extensions whose names are in the form of the [`NamespacedName`](#3-1-3-namespacedname) above.
+Currently, there are no built-in extensions defined for the Client Protocol.
+However, a Client or Broker MAY support arbitrary extensions whose names are in the form of the [`NamespacedName`](#3-1-3-namespacedname) above.
 
 # 5. The Service Protocol
 
@@ -132,21 +163,34 @@ The Service Protocol dictates communication between Brokers and Services.
 
 ## 5.1. Connection Initiation
 
-A Broker SHALL initiate a connection to the Services requested by the user when it starts. Brokers MUST be able to connect to a Service on any port, and Services MUST be able to serve on any port.
+A Broker SHALL initiate a connection to the Services requested by the user when it starts.
+Brokers MUST be able to connect to a Service on any port, and Services MUST be able to serve on any port.
 
-Brokers MUST first attempt to use HTTP/2, and MAY support HTTP/1.1 as well. Services SHOULD support HTTP/2 if at all possible, as the pipelining it allows is more useful than for the Client Protocol, as it is more likely that there are several in-flight requests at once.
+Brokers MUST first attempt to use HTTP/2, and MAY support HTTP/1.1 as well.
+Services SHOULD support HTTP/2 if at all possible, as the pipelining it allows is more useful than for the Client Protocol, as it is more likely that there are several in-flight requests at once.
 
 ## 5.2. Version Negotiation
 
-After the HTTP connection is established, the Broker SHALL make a POST request to the `/monto/version` path, with a [`ServiceBrokerNegotiation`](#5-4-1-servicebrokernegotiation) Message as the body. The Service SHALL check that it is compatible with the Broker. The Service SHALL respond with a [`ServiceNegotiation`](#5-4-2-servicenegotiation) Message. If the Service is compatible with the Broker, this response SHALL have an HTTP Status of 200. If the Service and Broker are not compatible, the response SHALL instead have an HTTP Status of 409.
+After the HTTP connection is established, the Broker SHALL make a POST request to the `/monto/version` path, with a [`ServiceBrokerNegotiation`](#5-4-1-servicebrokernegotiation) Message as the body.
+The Service SHALL check that it is compatible with the Broker.
+The Service SHALL respond with a [`ServiceNegotiation`](#5-4-2-servicenegotiation) Message.
+If the Service is compatible with the Broker, this response SHALL have an HTTP Status of 200.
+If the Service and Broker are not compatible, the response SHALL instead have an HTTP Status of 409.
 
-If the HTTP Status is 200, the Broker SHALL check that it is compatible with the Service. If the HTTP Status is not 200 or the Broker and Service are not compatible as determined by the Broker, the Broker MUST close the connection. In this situation, the Broker SHOULD log this event, and MAY choose to ignore the Service's existence.
+If the HTTP Status is 200, the Broker SHALL check that it is compatible with the Service.
+If the HTTP Status is not 200 or the Broker and Service are not compatible as determined by the Broker, the Broker MUST close the connection.
+In this situation, the Broker SHOULD log this event, and MAY choose to ignore the Service's existence.
 
-Compatibility between versions of the Service Protocol SHALL be determined using the Semantic Versioning rules. Additionally, a Broker MAY reject a Service that is known to not follow this specification correctly, and vice versa.
+Compatibility between versions of the Service Protocol SHALL be determined using the Semantic Versioning rules.
+Additionally, a Broker MAY reject a Service that is known to not follow this specification correctly, and vice versa.
 
-If the intersection of the `extensions` field of the `ServiceBrokerNegotiation` and `ServiceNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker. The semantics of an extension being enabled are left to that extension. All non-namespaced extensions are documented in the [Service Protocol Extensions](#5-6-service-protocol-extensions) section below.
+If the intersection of the `extensions` field of the `ServiceBrokerNegotiation` and `ServiceNegotiation` Messages is nonempty, the corresponding extensions MUST be considered to be enabled by both the Client and the Broker.
+The semantics of an extension being enabled are left to that extension.
+All non-namespaced extensions are documented in the [Service Protocol Extensions](#5-6-service-protocol-extensions) section below.
 
-If a non-zero number of extensions are enabled, all requests from the Broker to the Service and all responses from the Service to the Broker MUST have a `Monto-Extensions` HTTP header with a space-separated list of the enabled extensions, sorted lexicographically. For example, if the extensions `com.acme/foo` and `org.example/bar` are enabled, the header would read `Monto-Extensions: com.acme/foo org.example/bar`. The header MAY be present with an empty value when no extensions are enabled.
+If a non-zero number of extensions are enabled, all requests from the Broker to the Service and all responses from the Service to the Broker MUST have a `Monto-Extensions` HTTP header with a space-separated list of the enabled extensions, sorted lexicographically.
+For example, if the extensions `com.acme/foo` and `org.example/bar` are enabled, the header would read `Monto-Extensions: com.acme/foo org.example/bar`.
+The header MAY be present with an empty value when no extensions are enabled.
 
 ## 5.3. Requesting Products
 
@@ -175,19 +219,29 @@ The naïve Broker dependency-resolution algorithm is rather inefficient, and ca
 
 ### 5.5.1. Caching the Dependency Graph
 
-Typically, a source file's current dependencies are very similar to its past dependencies. This can be taken advantage of by caching the dependencies of a specific Product and requesting its dependencies before requesting the final Product. This potentially could result in more work being done that needed (as a no-longer needed dependency is still computed). Most edit actions don't affect the dependency graph, though, so this approach is efficient in the general case.
+Typically, a source file's current dependencies are very similar to its past dependencies.
+This can be taken advantage of by caching the dependencies of a specific Product and requesting its dependencies before requesting the final Product.
+This potentially could result in more work being done that needed (as a no-longer needed dependency is still computed).
+Most edit actions don't affect the dependency graph, though, so this approach is efficient in the general case.
 
 ### 5.5.2. Inferring Dependencies
 
-The semantics specified here intentionally do not specify in what order the Broker should query Services to obtain a Product. This allows a Broker to attempt to infer the dependencies a particular Product will have. Although no heuristics are described here, they could in principle be developed and applied.
+The semantics specified here intentionally do not specify in what order the Broker should query Services to obtain a Product.
+This allows a Broker to attempt to infer the dependencies a particular Product will have.
+Although no heuristics are described here, they could in principle be developed and applied.
 
 ## 5.6. Service Protocol Extensions
 
-Currently, there are no built-in extensions defined for the Service Protocol. However, a Broker or Service MAY support arbitrary extensions whose names are in the form of the `NamespacedName` above.
+Currently, there are no built-in extensions defined for the Service Protocol.
+However, a Broker or Service MAY support arbitrary extensions whose names are in the form of the `NamespacedName` above.
 
 # 6. Products
 
-Some fields are in common between most Product types. The main two are `startByte` and `endByte`. They represent the start and end of a selection of text from the corresponding source code. `startByte` is inclusive, while `endByte` is exclusive. The usage of "byte" in their names is significant -- these MUST be the the byte indexes, rather than the character indexes.
+Some fields are in common between most Product types.
+The main two are `startByte` and `endByte`.
+They represent the start and end of a selection of text from the corresponding source code.
+`startByte` is inclusive, while `endByte` is exclusive.
+The usage of "byte" in their names is significant -- these MUST be the the byte indexes, rather than the character indexes.
 
 {{% draft02-product 6 1 directory %}}
 {{% draft02-product 6 2 errors %}}
@@ -198,19 +252,24 @@ Some fields are in common between most Product types. The main two are `startByt
 
 ## 7.1. Remote Access To Local Files
 
-The Broker sends arbitrary files to Services, which may be running on a different machine. A malicious Service could therefore request a sensitive file (for example, `~/.ssh/id_rsa`). As a result, a Broker MAY claim such a file does not exist.
+The Broker sends arbitrary files to Services, which may be running on a different machine.
+A malicious Service could therefore request a sensitive file (for example, `~/.ssh/id_rsa`).
+As a result, a Broker MAY claim such a file does not exist.
 
 Furthermore, a security-conscious user MAY run the Broker in a virtual machine or container, only giving access to user files in specific directories.
 
 ## 7.2. Encrypted Transport
 
-HTTP/2 optionally supports TLS encryption. Most HTTP/2 implementations require encryption, so Clients, Brokers, and Services SHOULD support TLS encryption. Due to the relative difficulty of obtaining a TLS certificate for a local Service, Clients SHOULD support connecting to a Broker that does not support TLS or uses a self-signed certificate.
+HTTP/2 optionally supports TLS encryption.
+Most HTTP/2 implementations require encryption, so Clients, Brokers, and Services SHOULD support TLS encryption.
+Due to the relative difficulty of obtaining a TLS certificate for a local Service, Clients SHOULD support connecting to a Broker that does not support TLS or uses a self-signed certificate.
 
 # 8. Further Work
 
 ## 8.1. Binary Encoding instead of JSON
 
-A speed boost could potentially be gained by using CBOR {{% ref rfc7049 %}}, MessagePack {{% ref msgpack %}} or a similar format instead of JSON. This could be added as a simple protocol extension.
+A speed boost could potentially be gained by using CBOR {{% ref rfc7049 %}}, MessagePack {{% ref msgpack %}} or a similar format instead of JSON.
+This could be added as a simple protocol extension.
 
 ## 8.2. Asynchronous Communication
 
@@ -218,23 +277,31 @@ Re-adding support for asynchronous communication between Clients and Brokers as 
 
 ## 8.3. Commands
 
-Previous versions of Monto supported arbitrary commands being run by the Service, for example, renaming a function everywhere it appears (in all files). This is difficult to do while allowing Services to be run on remote machines. It could be achieved by allowing Services to request file writes in addition to reads, but would probably require a large amount of overhead, and come with its own security risks.
+Previous versions of Monto supported arbitrary commands being run by the Service, for example, renaming a function everywhere it appears (in all files).
+This is difficult to do while allowing Services to be run on remote machines.
+It could be achieved by allowing Services to request file writes in addition to reads, but would probably require a large amount of overhead, and come with its own security risks.
 
 ## 8.4. Stateful Services
 
-Some services inherently have state, such as debuggers. Unfortunately, this model does not translate well to the Monto Version 3 Protocol -- services may be shared with multiple brokers over the network. A possible solution would be to use a "state token," a unique identifier for each session.
+Some services inherently have state, such as debuggers.
+Unfortunately, this model does not translate well to the Monto Version 3 Protocol -- services may be shared with multiple brokers over the network.
+A possible solution would be to use a "state token," a unique identifier for each session.
 
 ## 8.5. Caching Products
 
-Most projects' dependencies contains more source code than the projects themselves -- the dependencies' source code is unlikely to change, and it is wasteful to send it over the network with each request. A simple Service Protocol Extension that remedies this problem would be a caching mechanism, in which the Broker would send an opaque identifier (e.g. a SHA-256 hash) for the dependencies instead of the dependencies themselves. A Service could then either use a cached copy, if one exists, or fail with an error similar to the `ServiceErrorUnmetDependency` error if the dependency is not in the cache.
+Most projects' dependencies contains more source code than the projects themselves -- the dependencies' source code is unlikely to change, and it is wasteful to send it over the network with each request.
+A simple Service Protocol Extension that remedies this problem would be a caching mechanism, in which the Broker would send an opaque identifier (e.g. a SHA-256 hash) for the dependencies instead of the dependencies themselves.
+A Service could then either use a cached copy, if one exists, or fail with an error similar to the `ServiceErrorUnmetDependency` error if the dependency is not in the cache.
 
 ## 8.6. Incremental Product Transfer
 
-The next step on the above would be to send all changes to files as deltas from a previous state. This would greatly decrease the amount of network bandwidth required, and would be a relatively minor variation on the above.
+The next step on the above would be to send all changes to files as deltas from a previous state.
+This would greatly decrease the amount of network bandwidth required, and would be a relatively minor variation on the above.
 
 ## 8.7. Incremental Compilation
 
-Once an incremental transfer system exists, full incremental compilation is easy to support. A Service would only have to cache the last Product cooresponding to the input, and then could use it in the next compilation for that Product.
+Once an incremental transfer system exists, full incremental compilation is easy to support.
+A Service would only have to cache the last Product cooresponding to the input, and then could use it in the next compilation for that Product.
 
 # 9. References
 
