@@ -22,7 +22,15 @@
 		{
 			"properties": {
 				"type": { "const": "service_error" },
-				"value": { "type": "string" }
+				"value": {
+					"type": "object",
+					"properties": {
+						"error": { "type": "string" },
+						"service": { "$ref": "Identifier.json#" }
+					},
+					"required": ["error", "service"],
+					"additionalProperties": false
+				}
 			},
 			"required": ["type", "value"],
 			"additionalProperties": false
@@ -30,7 +38,15 @@
 		{
 			"properties": {
 				"type": { "const": "service_connect_error" },
-				"value": { "type": "string" }
+				"value": {
+					"type": "object",
+					"properties": {
+						"error": { "type": "string" },
+						"service": { "$ref": "Identifier.json#" }
+					},
+					"required": ["error", "service"],
+					"additionalProperties": false
+				}
 			},
 			"required": ["type", "value"],
 			"additionalProperties": false
