@@ -9,7 +9,7 @@
 	<body>
 		<ul>
 			{{ range .Data.Pages.ByTitle }}
-			<li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+			<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
 			{{ end }}
 		</ul>
 	</body>

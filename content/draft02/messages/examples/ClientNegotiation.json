@@ -1,0 +1,18 @@
+{
+	"monto": {
+		"major": 3,
+		"minor": 0,
+		"patch": 0
+	},
+	"client": {
+		"id": "com.acme.foo",
+		"name": "Foo Client",
+		"vendor": "ACME Inc.",
+		"major": 0,
+		"minor": 1,
+		"patch": 0
+	},
+	"extensions": [
+		"com.acme.foo/cool_thing"
+	]
+}

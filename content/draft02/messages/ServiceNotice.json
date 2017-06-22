@@ -1,0 +1,20 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "ServiceNotice",
+	"description": "A message from a Broker to the Service signalling a non-error special condition.",
+
+	"oneOf": [
+		{
+			"title": "ServiceNoticeUnusedDependency",
+			"description": "A notice that a dependency was unused when producing a Product.",
+
+			"type": "object",
+			"properties": {
+				"type": { "const": "unused_dependency" },
+				"product": { "$ref": "ProductIdentifier.json#" }
+			},
+			"additionalProperties": false,
+			"required": ["type", "product"]
+		}
+	]
+}

@@ -1,0 +1,27 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "ClientRequest",
+	"description": "A request for Products from a Client to a Broker.",
+
+	"type": "object",
+	"properties": {
+		"products": {
+			"title": "ClientProducts",
+			"description": "Products being provided along with the request.",
+
+			"type": "array",
+			"items": { "$ref": "Product.json#" },
+			"uniqueItems": true
+		},
+		"requests": {
+			"title": "ClientRequests",
+			"description": "The actual requests.",
+
+			"type": "array",
+			"items": { "$ref": "ClientSingleRequest.json#" },
+			"uniqueItems": true
+		}
+	},
+	"additionalProperties": false,
+	"required": ["requests"]
+}
