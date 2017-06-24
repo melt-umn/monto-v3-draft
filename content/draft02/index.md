@@ -307,6 +307,11 @@ This would greatly decrease the amount of network bandwidth required, and would 
 Once an incremental transfer system exists, full incremental compilation is easy to support.
 A Service would only have to cache the last Product cooresponding to the input, and then could use it in the next compilation for that Product.
 
+## 8.8. Flow Control
+
+This would be a simple Client Protocol Extension adding a `flow_control` error possibility.
+When the Broker detects that requests for Products are being sent faster than Services can fulfill them, it sends this error.
+
 # 9. References
 
 ## 9.1. Normative References
