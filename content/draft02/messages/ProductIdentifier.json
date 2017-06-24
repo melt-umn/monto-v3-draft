@@ -4,10 +4,10 @@
 	"description": "A Product's name and language.",
 
 	"properties": {
-		"name": { "$ref": "ProductName.json#" },
 		"language": { "type": "string" },
+		"name": { "$ref": "ProductName.json#" },
 		"path": { "type": "string" }
 	},
 	"additionalProperties": false,
-	"required": ["name"]
+	"required": ["language", "name", "path"]
 }

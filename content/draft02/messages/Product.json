@@ -5,11 +5,11 @@
 
 	"type": "object",
 	"properties": {
-		"name": { "$ref": "ProductName.json#" },
+		"contents": {},
 		"language": { "type": "string" },
-		"path": { "type": "string" },
-		"contents": {}
+		"name": { "$ref": "ProductName.json#" },
+		"path": { "type": "string" }
 	},
 	"additionalProperties": false,
-	"required": ["name", "contents"]
+	"required": ["contents", "language", "name", "path"]
 }
