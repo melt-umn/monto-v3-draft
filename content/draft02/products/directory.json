@@ -18,7 +18,7 @@
 				]
 			}
 		},
-		"required": ["name", "absolutePath", "type"],
+		"required": ["name", "absolute_path", "type"],
 		"additionalProperties": false
 	}
 }

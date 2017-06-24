@@ -21,7 +21,15 @@
 			"description": "The Products a Service can produce.",
 
 			"type": "array",
-			"items": { "$ref": "ProductIdentifier.json#" },
+			"items": {
+				"type": "object",
+				"properties": {
+					"language": { "type": "string" },
+					"name": { "$ref": "ProductName.json#" }
+				},
+				"required": ["name", "language"],
+				"additionalProperties": false
+			},
 			"uniqueItems": true
 		}
 	},
