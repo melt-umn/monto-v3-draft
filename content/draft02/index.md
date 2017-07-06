@@ -74,10 +74,11 @@ The schemas are also present in the "schemas" directory, which should accompany 
 {{% draft02-message 3 1 1 Identifier %}}
 {{% draft02-message 3 1 2 NamespacedName %}}
 {{% draft02-message 3 1 3 Product %}}
-{{% draft02-message 3 1 4 ProductIdentifier %}}
-{{% draft02-message 3 1 5 ProductName %}}
-{{% draft02-message 3 1 6 ProtocolVersion %}}
-{{% draft02-message 3 1 7 SoftwareVersion %}}
+{{% draft02-message 3 1 4 ProductDescriptor %}}
+{{% draft02-message 3 1 5 ProductIdentifier %}}
+{{% draft02-message 3 1 6 ProductName %}}
+{{% draft02-message 3 1 7 ProtocolVersion %}}
+{{% draft02-message 3 1 8 SoftwareVersion %}}
 
 # 4. The Client Protocol
 
