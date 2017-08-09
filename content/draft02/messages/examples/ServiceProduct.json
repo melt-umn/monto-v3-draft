@@ -8,7 +8,7 @@
 	"notices": [
 		{
 			"type": "unused_dependency",
-			"product": {
+			"value": {
 				"name": "errors",
 				"language": "python",
 				"path": "/home/example/old_file.py"
