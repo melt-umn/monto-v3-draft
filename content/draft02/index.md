@@ -58,10 +58,14 @@ Both request and response bodies are JSON {{% ref rfc7159 %}}.
 This allows for the reuse of the many technologies that are capable of debugging this relatively common protocol combination, such as mitmproxy {{% ref mitmproxy %}}, Postman {{% ref postman %}}, and others.
 Furthermore, almost every mainstream programming language supports HTTP and JSON, meaning the wide variety of client programming languages (e.g. CoffeeScript, Emacs Lisp, Java, Python, etc.) can all interoperate with it.
 
+Unless specified otherwise, a Message is serialized as JSON and sent with a Content-Type of `application/json`.
+
 Both the Client Protocol and Service Protocol are versioned according to Semantic Versioning {{% ref semver %}}.
 This document describes Client Protocol version 3.0.0 and Service Protocol version 3.0.0.
+It is hoped that this versioning scheme allows future updates to the protocol without causing gratuitous breakage in the ecosystem -- a Client using a hypothetical version 3.1.0 protocol (without backwards compatibility) would not be able to connect to a Broker that only supports the version 3.0.0 Client Protocol, rather than being able to connect but having subtle semantic differences in the protocol.
+Furthermore, the Broker can implement any backwards-compatibility that is needed; the separation between Client and Service protocols facilitates having Clients and Services that are speaking different versions of the protocols, as neither knows (nor cares) about the protocol the other is speaking.
 
-Unless specified otherwise, a Message is serialized as JSON and sent with a Content-Type of `application/json`.
+Additionally, having an `extensions` field in the version allows for declaring that an implementation makes modifications to the specification in a way that can be detected by other components of the Monto, rather than again having secret semantic incompatibility.
 
 ## 3.1. Common Messages
 
@@ -278,7 +282,7 @@ This could be added as a simple protocol extension.
 
 ## 8.2. Asynchronous Communication
 
-Re-adding support for asynchronous communication between Clients and Brokers as a protocol extension could be implemented as a protocol extension either by polling, which is relatively efficient in HTTP/2, or with a chunked response in HTTP/1.1.
+Re-adding support for asynchronous communication between Clients and Brokers as a protocol extension could be implemented via polling (which is relatively efficient in HTTP/2 due to request multiplexing), WebSockets (in HTTP/1.1 only), or with a chunked response.
 
 ## 8.3. Commands
 
@@ -312,6 +316,7 @@ A Service would only have to cache the last Product cooresponding to the input, 
 
 This would be a simple Client Protocol Extension adding a `flow_control` error possibility.
 When the Broker detects that requests for Products are being sent faster than Services can fulfill them, it sends this error.
+The Client SHOULD reduce its request frequency in response.
 
 # 9. References
 
