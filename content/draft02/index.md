@@ -9,13 +9,13 @@ title = "Monto Version 3 Specification, Draft 2"
 
 # Abstract
 
-This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments {{% ref monto %}}.
+This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments {{% ref monto-2014 monto-2016 %}}.
 These improvements allow for simpler implementations for Clients.
 They also make it feasible to have multiple Clients sharing a single Service, and for Services to be operated over the Internet (rather than on the local network or on a single machine).
 
 # 1. Conventions and Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 {{% ref rfc2119 %}}.
 
 Other terms used in this specification are as follows.
 
@@ -325,8 +325,12 @@ Wright, A., Ed., and H. Andrews, Ed., "JSON Schema: A Media Type for Describing 
 "mitmproxy - home", [https://mitmproxy.org/](https://mitmproxy.org/).
 {{< /ref-citation >}}
 
-{{< ref-citation monto >}}
-Keidel, S., Pfeiffer, W., and S. Erdweg., "The IDE Portability Problem and Its Solution in Monto", [doi:10.1145/2997364.2997368](http://dx.doi.org/10.1145/2997364.2997368), November 2016.
+{{< ref-citation monto-2014 >}}
+Sloane, A., Roberts, M., Buckley, S., and S. Muscat, "Monto: A Disintegrated Development Environment", [doi:10.1007/978-3-319-11245-9_12](https://doi.org/10.1007/978-3-319-11245-9_12), September 2014.
+{{< /ref-citation >}}
+
+{{< ref-citation monto-2016 >}}
+Keidel, S., Pfeiffer, W., and S. Erdweg, "The IDE Portability Problem and Its Solution in Monto", [doi:10.1145/2997364.2997368](http://dx.doi.org/10.1145/2997364.2997368), November 2016.
 {{< /ref-citation >}}
 
 {{< ref-citation msgpack >}}

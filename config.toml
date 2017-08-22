@@ -2,3 +2,6 @@ baseURL = "https://melt-umn.github.io/monto-v3-draft/"
 PygmentsCodeFences = true
 PygmentsStyle = "emacs"
 taxonomies = {}
+
+[blackfriday]
+fractions = false
