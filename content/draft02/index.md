@@ -166,6 +166,12 @@ Currently, there are no built-in extensions defined for the Client Protocol.
 However, a Client or Broker MAY support arbitrary extensions whose names are in the form of the [`NamespacedName`](#3-1-2-namespacedname) above.
 These extensions are vendor-specific, and thus not specified here.
 
+## 4.7. Miscellanea
+
+If a Client detects a violation in the protocol from the Broker, it SHOULD inform the user and MAY terminate.
+
+If the Broker detects a violation in the protocol from a Client, it SHOULD NOT terminate, but MAY ignore the request, or ignore the Client completely.
+
 # 5. The Service Protocol
 
 The Service Protocol dictates communication between Brokers and Services.
@@ -243,6 +249,13 @@ Although no heuristics are described here, they could in principle be developed 
 
 Currently, there are no built-in extensions defined for the Service Protocol.
 However, a Broker or Service MAY support arbitrary extensions whose names are in the form of the `NamespacedName` above.
+
+## 5.7. Miscellanea
+
+If the Broker detects a violation in the protocol from a Service, it SHOULD report the error to the Client via the `service_connect_error` branch of the `BrokerGetError` Message.
+
+If a Service detects a violation in the protocol from a Broker, it SHOULD ignore the request, possibly logging it.
+In this case, the Service SHOULD respond with an HTTP status of 503.
 
 # 6. Products
 
