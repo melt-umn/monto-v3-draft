@@ -1,0 +1,24 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "directory",
+	"description": "A listing of a directory.",
+
+	"type": "array",
+	"items": {
+		"type": "object",
+		"properties": {
+			"name": { "type": "string" },
+			"absolute_path": { "type": "string" },
+			"type": {
+				"oneOf": [
+					{ "const": "file" },
+					{ "const": "directory" },
+					{ "const": "symlink" },
+					{ "const": "other" }
+				]
+			}
+		},
+		"required": ["name", "absolute_path", "type"],
+		"additionalProperties": false
+	}
+}

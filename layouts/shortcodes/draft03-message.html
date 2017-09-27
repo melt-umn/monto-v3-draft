@@ -1,0 +1,11 @@
+{{ $version := printf "%s.%s.%s" (.Get 0) (.Get 1) (.Get 2) }}
+{{ $name := .Get 3 }}
+
+{{ $topHeader := printf "### %s. `%s`\n" $version $name }}
+{{ $schemaHeader := printf "#### %s.1. Schema\n" $version }}
+{{ $exampleHeader := printf "#### %s.2. Example\n" $version }}
+
+{{ $schema := printf "```json\n%s\n```" (readFile (printf "content/draft03/messages/%s.json" $name)) }}
+{{ $example := printf "```json\n%s\n```" (readFile (printf "content/draft03/messages/examples/%s.json" $name)) }}
+
+{{ printf "%s%s%s\n%s%s\n" $topHeader $schemaHeader $schema $exampleHeader $example | markdownify }}

@@ -1,0 +1,66 @@
+[
+	{
+		"start_byte": 0,
+		"end_byte": 1,
+		"color": {
+			"type": "token",
+			"value": "punctuation"
+		}
+	},
+	{
+		"start_byte": 1,
+		"end_byte": 5,
+		"color": {
+			"type": "token",
+			"value": "keyword"
+		}
+	},
+	{
+		"start_byte": 6,
+		"end_byte": 7,
+		"color": {
+			"type": "token",
+			"value": "punctuation"
+		}
+	},
+	{
+		"start_byte": 7,
+		"end_byte": 10,
+		"color": {
+			"type": "token",
+			"value": "identifier"
+		}
+	},
+	{
+		"start_byte": 10,
+		"end_byte": 11,
+		"color": {
+			"type": "token",
+			"value": "punctuation"
+		}
+	},
+	{
+		"start_byte": 14,
+		"end_byte": 15,
+		"color": {
+			"type": "token",
+			"value": "literal"
+		}
+	},
+	{
+		"start_byte": 15,
+		"end_byte": 16,
+		"color": {
+			"type": "token",
+			"value": "punctuation"
+		}
+	},
+	{
+		"start_byte": 18,
+		"end_byte": 20,
+		"color": {
+			"type": "palette",
+			"value": 3
+		}
+	}
+]

@@ -1,0 +1,20 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "BrokerRequest",
+	"description": "A request for a Product from the Broker to a Service.",
+
+	"type": "object",
+	"properties": {
+		"products": {
+			"title": "BrokerProducts",
+			"description": "Products being provided along with the request.",
+
+			"type": "array",
+			"items": { "$ref": "Product.json#" },
+			"uniqueItems": true
+		},
+		"request": { "$ref": "ProductIdentifier.json#" }
+	},
+	"additionalProperties": false,
+	"required": ["request"]
+}

@@ -1,0 +1,8 @@
+{
+	"products": [],
+	"request": {
+		"name": "errors",
+		"language": "python",
+		"path": "/foo/bar.py"
+	}
+}

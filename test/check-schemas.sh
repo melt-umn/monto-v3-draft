@@ -19,3 +19,5 @@ testDir draft01/messages
 testDir draft01/products
 testDir draft02/messages
 testDir draft02/products
+testDir draft03/messages
+testDir draft03/products

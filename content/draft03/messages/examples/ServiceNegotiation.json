@@ -1,0 +1,28 @@
+{
+	"monto": {
+		"major": 3,
+		"minor": 0,
+		"patch": 0
+	},
+	"service": {
+		"id": "com.acme.quux",
+		"name": "Quux Service",
+		"vendor": "ACME Inc.",
+		"major": 0,
+		"minor": 1,
+		"patch": 0
+	},
+	"products": [
+		{
+			"name": "errors",
+			"language": "python"
+		},
+		{
+			"name": "com.acme/styleguide",
+			"language": "python"
+		}
+	],
+	"extensions": [
+		"com.acme.quux/incremental"
+	]
+}

@@ -1,0 +1,19 @@
+{
+	"name": "com.example.outline",
+	"language": "python",
+	"path": "/foo/bar.py",
+	"contents": [
+		{
+			"type": "function",
+			"name": "main",
+			"byteLocation": 80
+		}
+	],
+	"meta": [
+		{
+			"service": "com.example.python_ast",
+			"type": "degraded",
+			"value": "Parse errors present, AST is provided on a best-effort basis"
+		}
+	]
+}
