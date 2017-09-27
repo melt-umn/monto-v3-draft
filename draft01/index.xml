@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Draft01s on </title>
+    <link>https://melt-umn.github.io/monto-v3-draft/draft01/</link>
+    <description>Recent content in Draft01s on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    
+	<atom:link href="https://melt-umn.github.io/monto-v3-draft/draft01/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Monto Version 3 Specification, Draft 1</title>
+      <link>https://melt-umn.github.io/monto-v3-draft/draft01/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://melt-umn.github.io/monto-v3-draft/draft01/</guid>
+      <description>Abstract This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments ([MONTO]) . These improvements allow for simpler implementations for Clients. They also make it feasible to have multiple Clients sharing a single Service, and for Services to be operated over the Internet (rather than on the local network or on a single machine).
+1. Conventions and Terminology The key words &amp;ldquo;MUST&amp;rdquo;, &amp;ldquo;MUST NOT&amp;rdquo;, &amp;ldquo;REQUIRED&amp;rdquo;, &amp;ldquo;SHALL&amp;rdquo;, &amp;ldquo;SHALL NOT&amp;rdquo;, &amp;ldquo;SHOULD&amp;rdquo;, &amp;ldquo;SHOULD NOT&amp;rdquo;, &amp;ldquo;RECOMMENDED&amp;rdquo;, &amp;ldquo;MAY&amp;rdquo;, and &amp;ldquo;OPTIONAL&amp;rdquo; in this document are to be interpreted as described in RFC 2119.</description>
+    </item>
+    
+  </channel>
+</rss>

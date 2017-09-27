@@ -1,0 +1,55 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "BrokerGetError",
+	"description": "An error that occurs during the requesting of a product by a Client.",
+
+	"type": "object",
+	"oneOf": [
+		{
+			"properties": {
+				"type": { "const": "no_such_service" }
+			},
+			"required": ["type"],
+			"additionalProperties": false
+		},
+		{
+			"properties": {
+				"type": { "const": "no_such_product" }
+			},
+			"required": ["type"],
+			"additionalProperties": false
+		},
+		{
+			"properties": {
+				"type": { "const": "service_error" },
+				"value": {
+					"type": "object",
+					"properties": {
+						"error": { "type": "string" },
+						"service": { "$ref": "Identifier.json#" }
+					},
+					"required": ["error", "service"],
+					"additionalProperties": false
+				}
+			},
+			"required": ["type", "value"],
+			"additionalProperties": false
+		},
+		{
+			"properties": {
+				"type": { "const": "service_connect_error" },
+				"value": {
+					"type": "object",
+					"properties": {
+						"error": { "type": "string" },
+						"service": { "$ref": "Identifier.json#" }
+					},
+					"required": ["error", "service"],
+					"additionalProperties": false
+				}
+			},
+			"required": ["type", "value"],
+			"additionalProperties": false
+		}
+	]
+}

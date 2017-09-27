@@ -1,0 +1,51 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "ServiceErrors",
+	"description": "Errors encountered by a Service.",
+
+	"type": "object",
+	"properties": {
+		"errors": {
+			"type": "array",
+			"items": { "$ref": "#/definitions/error" },
+			"minItems": 1
+		},
+		"notices": {
+			"type": "array",
+			"items": { "$ref": "ServiceNotice.json#" }
+		}
+	},
+	"required": ["errors"],
+	"additionalProperties": false,
+
+	"definitions": {
+		"error": {
+			"oneOf": [
+				{
+					"title": "ServiceErrorUnmetDependency",
+					"description": "An error representing a dependency not being present.",
+	
+					"type": "object",
+					"properties": {
+						"type": { "const": "unmet_dependency" },
+						"value": { "$ref": "ProductIdentifier.json#" }
+					},
+					"required": ["type", "value"],
+					"additionalProperties": false
+				},
+				{
+					"title": "ServiceErrorOther",
+					"description": "A miscellaneous error.",
+	
+					"type": "object",
+					"properties": {
+						"type": { "const": "other" },
+						"value": { "type": "string" }
+					},
+					"required": ["type", "value"],
+					"additionalProperties": false
+				}
+			]
+		}
+	}
+}

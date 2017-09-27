@@ -1,0 +1,14 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "MontoVersion",
+	"description": "The version number of the Monto protocol.",
+
+	"type": "object",
+	"properties": {
+		"major": { "type": "integer" },
+		"minor": { "type": "integer" },
+		"patch": { "type": "integer" }
+	},
+	"additionalProperties": false,
+	"required": ["major", "minor", "patch"]
+}

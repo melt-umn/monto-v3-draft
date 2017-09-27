@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Draft02s on </title>
+    <link>https://melt-umn.github.io/monto-v3-draft/draft02/</link>
+    <description>Recent content in Draft02s on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    
+	<atom:link href="https://melt-umn.github.io/monto-v3-draft/draft02/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Monto Version 3 Specification, Draft 2</title>
+      <link>https://melt-umn.github.io/monto-v3-draft/draft02/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://melt-umn.github.io/monto-v3-draft/draft02/</guid>
+      <description>TODOs  Document configuration  Stateful or stateless config in the client protocol?   Abstract This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments ([MONTO-2014][MONTO-2016]) . These improvements allow for simpler implementations for Clients. They also make it feasible to have multiple Clients sharing a single Service, and for Services to be operated over the Internet (rather than on the local network or on a single machine).</description>
+    </item>
+    
+  </channel>
+</rss>

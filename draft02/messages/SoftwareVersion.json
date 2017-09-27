@@ -1,0 +1,17 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "SoftwareVersion",
+	"description": "The version and implementation of a Client, Broker, or Service.",
+
+	"type": "object",
+	"properties": {
+		"id": { "$ref": "Identifier.json#" },
+		"name": { "type": "string" },
+		"vendor": { "type": "string" },
+		"major": { "type": "integer" },
+		"minor": { "type": "integer" },
+		"patch": { "type": "integer" }
+	},
+	"additionalProperties": false,
+	"required": ["id"]
+}

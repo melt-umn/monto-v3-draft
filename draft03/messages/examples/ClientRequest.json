@@ -1,0 +1,21 @@
+{
+	"requests": [
+		{
+			"product": {
+				"name": "source",
+				"language": "python",
+				"path": "/projects/hello/hello_world.py"
+			},
+			"service": "com.acme.quux"
+		}
+	],
+	"products": [
+		{
+			"name": "source",
+			"language": "python",
+			"path": "/projects/hello/hello_world.py",
+			"contents": "print(\"Hello, world!\")",
+			"meta": []
+		}
+	]
+}

@@ -1,0 +1,38 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "Product",
+	"description": "A Product, along with its contents.",
+
+	"type": "object",
+	"properties": {
+		"contents": {},
+		"language": { "type": "string" },
+		"name": { "$ref": "ProductName.json#" },
+		"meta": {
+			"type": "array",
+			"items": { "$ref": "#/definitions/metaItem" }
+		},
+		"path": { "type": "string" }
+	},
+	"additionalProperties": false,
+	"required": ["contents", "language", "meta", "name", "path"],
+
+	"definitions": {
+		"metaItem": {
+			"type": "object",
+			"properties": {
+				"service": { "$ref": "Identifier.json#" },
+				"type": { "$ref": "#/definitions/metaType" },
+				"value": { "type": "string" }
+			},
+			"additionalProperties": false,
+			"required": ["service", "type", "value"]
+		},
+		"metaType": {
+			"oneOf": [
+				{ "const": "degraded" },
+				{ "$ref": "Identifier.json#" }
+			]
+		}
+	}
+}

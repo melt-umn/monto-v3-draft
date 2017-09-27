@@ -1,0 +1,38 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "BrokerResponse",
+	"description": "A response containing Products from the Broker to a Client.",
+
+	"type": "array",
+	"items": {
+		"title": "BrokerSingleResponse",
+		"description": "A single response from a Service.",
+		
+		"oneOf": [
+			{
+				"title": "BrokerErrorResponse",
+				"description": "A BrokerSingleResponse representing an error.",
+
+				"type": "object",
+				"properties": {
+					"type": { "const": "error" },
+					"value": { "$ref": "ServiceErrors.json#" }
+				},
+				"required": ["type", "value"],
+				"additionalProperties": false
+			},
+			{
+				"title": "BrokerProductResponse",
+				"description": "A BrokerSingleResponse representing the successful retrieval of a Product.",
+
+				"type": "object",
+				"properties": {
+					"type": { "const": "product" },
+					"value": { "$ref": "Product.json#" }
+				},
+				"required": ["type", "value"],
+				"additionalProperties": false
+			}
+		]
+	}
+}

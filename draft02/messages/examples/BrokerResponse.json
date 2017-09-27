@@ -1,0 +1,11 @@
+[
+	{
+		"type": "product",
+		"value": {
+			"name": "errors",
+			"language": "python",
+			"path": "/foo/bar.py",
+			"contents": []
+		}
+	}
+]

@@ -1,0 +1,16 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "ServiceProduct",
+	"description": "A response containing a Product from a Service to be returned the Broker.",
+
+	"type": "object",
+	"properties": {
+		"product": { "$ref": "Product.json#" },
+		"notices": {
+			"type": "array",
+			"items": { "$ref": "ServiceNotice.json#" }
+		}
+	},
+	"required": ["product"],
+	"additionalProperties": false
+}

@@ -1,0 +1,37 @@
+[
+	{
+		"startByte": 0,
+		"endByte": 1,
+		"token": "punctuation"
+	},
+	{
+		"startByte": 1,
+		"endByte": 5,
+		"token": "keyword"
+	},
+	{
+		"startByte": 6,
+		"endByte": 7,
+		"token": "punctuation"
+	},
+	{
+		"startByte": 7,
+		"endByte": 10,
+		"token": "identifier"
+	},
+	{
+		"startByte": 10,
+		"endByte": 11,
+		"token": "punctuation"
+	},
+	{
+		"startByte": 14,
+		"endByte": 15,
+		"token": "literal"
+	},
+	{
+		"startByte": 15,
+		"endByte": 16,
+		"token": "punctuation"
+	}
+]

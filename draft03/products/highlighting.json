@@ -1,0 +1,62 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "highlighting",
+	"description": "Token information to be used for highlighting source code.",
+
+	"type": "array",
+	"items": {
+		"type": "object",
+		"properties": {
+			"start_byte": { "$ref": "#/definitions/byteOffset" },
+			"end_byte": { "$ref": "#/definitions/byteOffset" },
+			"color": { "$ref": "#/definitions/color" }
+		},
+		"required": ["start_byte", "end_byte", "color"],
+		"additionalProperties": false
+	},
+
+	"definitions": {
+		"byteOffset": {
+			"type": "integer",
+			"minimum": 0
+		},
+		"color": {
+			"oneOf": [
+				{
+					"type": "object",
+					"properties": {
+						"type": { "const": "token" },
+						"value": { "$ref": "#/definitions/token" }
+					},
+					"required": ["type", "value"],
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"properties": {
+						"type": { "const": "palette" },
+						"value": {
+							"type": "integer",
+							"minimum": 0,
+							"maximum": 15
+						}
+					},
+					"required": ["type", "value"],
+					"additionalProperties": false
+				}
+			]
+		},
+		"token": {
+			"oneOf": [
+				{ "const": "comment" },
+				{ "const": "function" },
+				{ "const": "identifier" },
+				{ "const": "keyword" },
+				{ "const": "literal" },
+				{ "const": "operator" },
+				{ "const": "punctuation" },
+				{ "const": "type" }
+			]
+		}
+	}
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title></title>
+    <link>https://melt-umn.github.io/monto-v3-draft/</link>
+    <description>Recent content on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    
+	<atom:link href="https://melt-umn.github.io/monto-v3-draft/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Differences</title>
+      <link>https://melt-umn.github.io/monto-v3-draft/differences/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://melt-umn.github.io/monto-v3-draft/differences/</guid>
+      <description>The Monto Version 3 protocol differs from Version 2 in several ways.
+HTTP/2 instead of ZeroMQ ZeroMQ requires FFI, which is difficult in some editors and requires an additional dependency in all. For example, to implement monto-mode, a Monto major mode for emacs, the author needed to depend on elisp-ffi, a package that provides FFI for Emacs by spawning a subprocess and communicating with a custom protocol over pipes. Needless to say, this is horrible and inefficient.</description>
+    </item>
+    
+    <item>
+      <title>Monto Version 3 Specification, Draft 1</title>
+      <link>https://melt-umn.github.io/monto-v3-draft/draft01/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://melt-umn.github.io/monto-v3-draft/draft01/</guid>
+      <description>Abstract This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments ([MONTO]) . These improvements allow for simpler implementations for Clients. They also make it feasible to have multiple Clients sharing a single Service, and for Services to be operated over the Internet (rather than on the local network or on a single machine).
+1. Conventions and Terminology The key words &amp;ldquo;MUST&amp;rdquo;, &amp;ldquo;MUST NOT&amp;rdquo;, &amp;ldquo;REQUIRED&amp;rdquo;, &amp;ldquo;SHALL&amp;rdquo;, &amp;ldquo;SHALL NOT&amp;rdquo;, &amp;ldquo;SHOULD&amp;rdquo;, &amp;ldquo;SHOULD NOT&amp;rdquo;, &amp;ldquo;RECOMMENDED&amp;rdquo;, &amp;ldquo;MAY&amp;rdquo;, and &amp;ldquo;OPTIONAL&amp;rdquo; in this document are to be interpreted as described in RFC 2119.</description>
+    </item>
+    
+    <item>
+      <title>Monto Version 3 Specification, Draft 2</title>
+      <link>https://melt-umn.github.io/monto-v3-draft/draft02/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://melt-umn.github.io/monto-v3-draft/draft02/</guid>
+      <description>TODOs  Document configuration  Stateful or stateless config in the client protocol?   Abstract This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments ([MONTO-2014][MONTO-2016]) . These improvements allow for simpler implementations for Clients. They also make it feasible to have multiple Clients sharing a single Service, and for Services to be operated over the Internet (rather than on the local network or on a single machine).</description>
+    </item>
+    
+    <item>
+      <title>Monto Version 3 Specification, Draft 3</title>
+      <link>https://melt-umn.github.io/monto-v3-draft/draft03/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://melt-umn.github.io/monto-v3-draft/draft03/</guid>
+      <description>Draft 4 TODOs  Design, Document, Implement Configuration  Client Protocol  global config in broker, stateful and persisted per-client stateless config  Service Protocol  stateless    Abstract This specification describes an improved iteration of the Monto protocol for Disintegrated Development Environments ([MONTO-2014][MONTO-2016]) . These improvements allow for simpler implementations for Clients. They also make it feasible to have multiple Clients sharing a single Service, and for Services to be operated over the Internet (rather than on the local network or on a single machine).</description>
+    </item>
+    
+    <item>
+      <title>Overview, Justifications, and FAQs</title>
+      <link>https://melt-umn.github.io/monto-v3-draft/overview/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://melt-umn.github.io/monto-v3-draft/overview/</guid>
+      <description>Note: This document has some overlap with the Differences document; read that too.
+Overview of Monto 3 Monto 3 is split into two &amp;ldquo;subprotocols,&amp;rdquo; the Client Protocol and the Service Protocol. This is done so that changes and extensions can be made to each one individually.
+For example, adding multi-user caching for services to the specification requires no differences in the Client Protocol, so it does not require bumping the Client Protocol version number.</description>
+    </item>
+    
+  </channel>
+</rss>

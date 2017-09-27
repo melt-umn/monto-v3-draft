@@ -1,0 +1,7 @@
+[
+	{
+		"message": "Invalid import: foo.bar",
+		"startByte": 0,
+		"endByte": 19
+	}
+]

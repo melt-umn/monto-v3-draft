@@ -1,0 +1,16 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "BrokerPutError",
+	"description": "An error that occurs during the sending of a product from a Client to the Broker.",
+
+	"type": "object",
+	"oneOf": [
+		{
+			"properties": {
+				"type": { "const": "no_language" }
+			},
+			"required": ["type"],
+			"additionalProperties": false
+		}
+	]
+}

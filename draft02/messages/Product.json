@@ -1,0 +1,15 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "Product",
+	"description": "A Product, along with its contents.",
+
+	"type": "object",
+	"properties": {
+		"contents": {},
+		"language": { "type": "string" },
+		"name": { "$ref": "ProductName.json#" },
+		"path": { "type": "string" }
+	},
+	"additionalProperties": false,
+	"required": ["contents", "language", "name", "path"]
+}

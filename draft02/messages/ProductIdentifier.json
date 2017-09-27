@@ -1,0 +1,13 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "ProductIdentifier",
+	"description": "A Product's name, language, and path.",
+
+	"properties": {
+		"language": { "type": "string" },
+		"name": { "$ref": "ProductName.json#" },
+		"path": { "type": "string" }
+	},
+	"additionalProperties": false,
+	"required": ["language", "name", "path"]
+}

@@ -1,0 +1,19 @@
+{
+	"monto": {
+		"major": 3,
+		"minor": 0,
+		"patch": 0
+	},
+	"broker": {
+		"id": "com.acme.bar",
+		"name": "Bar Broker",
+		"vendor": "ACME Inc.",
+		"major": 0,
+		"minor": 1,
+		"patch": 0
+	},
+	"extensions": [
+		"com.acme.foo/cool_thing",
+		"com.acme.bar/other_thing"
+	]
+}

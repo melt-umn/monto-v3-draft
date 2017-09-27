@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Overview, Justifications, and FAQs</title>
+		<style>
+	body { font-family: sans-serif; }
+	code, pre {
+		background-color: #f8f8f8;
+		font-family: monospace;
+		tab-size: 4;
+	}
+	dt { font-weight: bold; }
+	header > h1 { font-size: 30px; }
+	main p { margin-left: 10px; }
+	.anchorjs-link { color: #7f7f7f; }
+	#TableOfContents { float: right; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.0.0/anchor.min.js"></script>
+
+	</head>
+	<body>
+		<header>
+			<h1>Overview, Justifications, and FAQs</h1>
+			<nav id="TableOfContents">
+<ul>
+<li><a href="#overview-of-monto-3">Overview of Monto 3</a>
+<ul>
+<li><a href="#client-protocol">Client Protocol</a></li>
+<li><a href="#service-protocol">Service Protocol</a></li>
+</ul></li>
+<li><a href="#justifications-faqs">Justifications / FAQs</a>
+<ul>
+<li><a href="#why-have-synchronous-rpcs-instead-of-asynchronous-messages">Why have synchronous RPCs instead of asynchronous messages?</a></li>
+<li><a href="#why-have-a-literally-20-page-spec-instead-of-a-common-sense-document">Why have a (literally!) 20-page spec instead of a common-sense document?</a></li>
+<li><a href="#why-http-why-not-x-instead">Why HTTP? Why not <em>x</em> instead?</a></li>
+</ul></li>
+</ul>
+</nav>
+		</header>
+		<main>
+			
+
+<p><strong>Note</strong>: This document has some overlap with the <a href="/monto-v3-draft/differences/">Differences</a> document; read that too.</p>
+
+<h1 id="overview-of-monto-3">Overview of Monto 3</h1>
+
+<p>Monto 3 is split into two &ldquo;subprotocols,&rdquo; the Client Protocol and the Service Protocol.
+This is done so that changes and extensions can be made to each one individually.</p>
+
+<p>For example, adding <a href="/monto-v3-draft/draft02/#8-5-caching-products">multi-user caching for services</a> to the specification requires no differences in the Client Protocol, so it does not require bumping the Client Protocol version number.
+Old clients would therefore still work with these changes.</p>
+
+<h2 id="client-protocol">Client Protocol</h2>
+
+<p>Once the client is connected to the broker (see the <a href="/monto-v3-draft/draft02/#4-1-connection-initiation">spec</a>), there are two operations that can be performed: send a product to the broker and request a product from the broker.</p>
+
+<p>These have the approximate type signatures:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#080;font-style:italic">-- The name of a type of product. Other than CustomProduct, these are given in</span>
+<span style="color:#080;font-style:italic">-- the spec.</span>
+<span style="color:#a2f;font-weight:bold">data</span> <span style="color:#0b0;font-weight:bold">ProductName</span>
+  <span style="color:#a2f;font-weight:bold">=</span> <span style="color:#0b0;font-weight:bold">Directory</span>
+  <span style="color:#666">|</span> <span style="color:#0b0;font-weight:bold">Errors</span>
+  <span style="color:#666">|</span> <span style="color:#0b0;font-weight:bold">Highlighting</span>
+  <span style="color:#666">|</span> <span style="color:#0b0;font-weight:bold">Source</span>
+  <span style="color:#666">|</span> <span style="color:#0b0;font-weight:bold">CustomProduct</span> <span style="color:#0b0;font-weight:bold">Identifier</span>
+
+<span style="color:#080;font-style:italic">-- The name of a programming language.</span>
+<span style="color:#a2f;font-weight:bold">type</span> <span style="color:#0b0;font-weight:bold">Language</span> <span style="color:#a2f;font-weight:bold">=</span> <span style="color:#0b0;font-weight:bold">String</span>
+
+<span style="color:#080;font-style:italic">-- A single product.</span>
+<span style="color:#a2f;font-weight:bold">type</span> <span style="color:#0b0;font-weight:bold">Product</span> <span style="color:#a2f;font-weight:bold">=</span> <span style="color:#0b0;font-weight:bold">Product</span> <span style="color:#00a000">a</span>
+  { <span style="color:#00a000">name</span> <span style="color:#a2f;font-weight:bold">::</span> <span style="color:#0b0;font-weight:bold">ProductName</span>
+  , <span style="color:#00a000">language</span> <span style="color:#a2f;font-weight:bold">::</span> <span style="color:#0b0;font-weight:bold">Language</span>
+  , <span style="color:#00a000">path</span> <span style="color:#a2f;font-weight:bold">::</span> <span style="color:#0b0;font-weight:bold">String</span>
+  , <span style="color:#00a000">contents</span> <span style="color:#a2f;font-weight:bold">::</span> <span style="color:#00a000">a</span>
+  }
+
+<span style="color:#00a000">sendProduct</span> <span style="color:#a2f;font-weight:bold">::</span> <span style="color:#0b0;font-weight:bold">Product</span> <span style="color:#00a000">a</span> <span style="color:#a2f;font-weight:bold">-&gt;</span> <span style="color:#a2f">()</span>
+<span style="color:#00a000">requestProduct</span> <span style="color:#a2f;font-weight:bold">::</span> <span style="color:#0b0;font-weight:bold">ProductName</span> <span style="color:#0b0;font-weight:bold">Language</span> <span style="color:#0b0;font-weight:bold">String</span> <span style="color:#a2f;font-weight:bold">-&gt;</span> <span style="color:#0b0;font-weight:bold">Either</span> <span style="color:#0b0;font-weight:bold">BrokerGetError</span> <span style="color:#00a000">a</span></code></pre>
+</div>
+<p>The envisioned usage is something like this:</p>
+
+<ul>
+<li>Whenever the user edits the file, the Client sends the Source Product representing the file to the Broker.</li>
+<li>Whenever an updated product is needed, the Client requests it from the Broker.</li>
+</ul>
+
+<h2 id="service-protocol">Service Protocol</h2>
+
+<p>In the Service Protocol, the Broker &ldquo;calls into&rdquo; the Service.</p>
+
+<p>The service therefore has to expose the functions:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#080;font-style:italic">-- A product that can contain any sort of contents.</span>
+<span style="color:#a2f;font-weight:bold">type</span> <span style="color:#0b0;font-weight:bold">GenericProduct</span> <span style="color:#a2f;font-weight:bold">=</span> <span style="color:#0b0;font-weight:bold">Product</span> <span style="color:#0b0;font-weight:bold">Json</span>
+
+<span style="color:#080;font-style:italic">-- A list of the supported (ProductName, Language) combinations to request.</span>
+<span style="color:#00a000">functions</span> <span style="color:#a2f;font-weight:bold">::</span> [(<span style="color:#0b0;font-weight:bold">ProductName</span>, <span style="color:#0b0;font-weight:bold">Language</span>)]
+
+<span style="color:#080;font-style:italic">-- Non-error messages sent by the service.</span>
+<span style="color:#a2f;font-weight:bold">data</span> <span style="color:#0b0;font-weight:bold">Notice</span>
+  <span style="color:#a2f;font-weight:bold">=</span> <span style="color:#0b0;font-weight:bold">UnusedDependency</span> <span style="color:#0b0;font-weight:bold">ProductName</span> <span style="color:#0b0;font-weight:bold">Language</span> <span style="color:#0b0;font-weight:bold">FilePath</span>
+
+<span style="color:#080;font-style:italic">-- Errors from the service.</span>
+<span style="color:#a2f;font-weight:bold">data</span> <span style="color:#0b0;font-weight:bold">Error</span>
+  <span style="color:#a2f;font-weight:bold">=</span> <span style="color:#0b0;font-weight:bold">UnmetDependency</span> <span style="color:#0b0;font-weight:bold">ProductName</span> <span style="color:#0b0;font-weight:bold">Language</span> <span style="color:#0b0;font-weight:bold">FilePath</span>
+  <span style="color:#666">|</span> <span style="color:#0b0;font-weight:bold">Other</span> <span style="color:#0b0;font-weight:bold">String</span>
+
+<span style="color:#080;font-style:italic">-- Runs a specific function.</span>
+<span style="color:#00a000">request</span> <span style="color:#a2f;font-weight:bold">::</span> <span style="color:#0b0;font-weight:bold">ProductName</span> <span style="color:#080;font-style:italic">-- The name of the requested product.</span>
+        <span style="color:#a2f;font-weight:bold">-&gt;</span> <span style="color:#0b0;font-weight:bold">Language</span> <span style="color:#080;font-style:italic">-- The language of the requested product.</span>
+		<span style="color:#a2f;font-weight:bold">-&gt;</span> <span style="color:#0b0;font-weight:bold">FilePath</span> <span style="color:#080;font-style:italic">-- The path the product is requested for.</span>
+		<span style="color:#a2f;font-weight:bold">-&gt;</span> [<span style="color:#0b0;font-weight:bold">GenericProduct</span>] <span style="color:#080;font-style:italic">-- The dependencies provided by the Broker.</span>
+		<span style="color:#a2f;font-weight:bold">-&gt;</span> (<span style="color:#0b0;font-weight:bold">Either</span> [<span style="color:#0b0;font-weight:bold">Error</span>] (<span style="color:#0b0;font-weight:bold">Product</span> <span style="color:#00a000">a</span>), [<span style="color:#0b0;font-weight:bold">Notice</span>])</code></pre>
+</div>
+<p>The Broker then handles resolving dependencies, etc.</p>
+
+<h1 id="justifications-faqs">Justifications / FAQs</h1>
+
+<h2 id="why-have-synchronous-rpcs-instead-of-asynchronous-messages">Why have synchronous RPCs instead of asynchronous messages?</h2>
+
+<ul>
+<li>It&rsquo;s hard to error-handle the lack of a response
+
+<ul>
+<li>The most reasonable method is to put a cap on the amount of time allowed to be spent waiting for a response</li>
+<li>However, this creates the issue that a slow response is equivalent to a failing one</li>
+<li>Some errors (e.g. service is misconfigured) should <strong>not</strong> be silent!</li>
+</ul></li>
+<li>Only the needed products are computed
+
+<ul>
+<li>Since the products wanted are explicitly requested, expensive but infrequently-wanted products (e.g. unit test coverage) are not computed every change.</li>
+</ul></li>
+<li>Service discovery is easy
+
+<ul>
+<li>The Broker simply sends the Client what amounts to a list of type signatures, so the client knows what to expect ahead of time</li>
+</ul></li>
+<li>A lot simpler to implement
+
+<ul>
+<li><code>curl &quot;http://localhost:28888/monto/com.example.service/errors?path=/projects/foo/bar.c&amp;language=c&quot;</code> is all you need to request a product</li>
+</ul></li>
+<li>No ZeroMQ needed
+
+<ul>
+<li>If you want a rant, ask me about connecting to ZeroMQ from Emacs Lisp</li>
+<li>ZeroMQ seems to not handle version-compatibility between different versions of itself?</li>
+<li>Has two different Java bindings, which seem to speak different versions of the protocol</li>
+<li>In more practical terms, it&rsquo;s another dependency.</li>
+</ul></li>
+</ul>
+
+<h2 id="why-have-a-literally-20-page-spec-instead-of-a-common-sense-document">Why have a (literally!) 20-page spec instead of a common-sense document?</h2>
+
+<blockquote>
+<p>If you don&rsquo;t start with a spec, every piece of code you write is a patch.</p>
+
+<p>&ndash; Leslie Lamport</p>
+</blockquote>
+
+<p>Basically, it should be possible to implement Monto without reading a single line of code outside of the spec.
+And if you want an overview, that&rsquo;s in this document.</p>
+
+<h2 id="why-http-why-not-x-instead">Why HTTP? Why not <em>x</em> instead?</h2>
+
+<p>(See <a href="/monto-v3-draft/differences/#http-2-instead-of-zeromq">here</a> for the specific case of <em>x</em> = ZeroMQ)</p>
+
+<p>If you&rsquo;re reading this document, your computer already has an HTTP client installed.
+A large variety of high-quality HTTP clients and services are available in many languages, and there are a great many tools to work with HTTP (Postman, Wireshark, mitmproxy, etc.).</p>
+
+<p>If services are on localhost, the transport protocol is essentially negligible unless it becomes a bottleneck.
+HTTP is well-enough known and used that a large number of highly optimized, high-quality implementations are available, so it will almost definitely not be the bottleneck.
+If the service is on the network, HTTP is an even better choice, as some networks block non-HTTP requests.
+Furthermore, HTTPS is a high-quality, well-known, already-implemented solution to security for service communication on the network.</p>
+
+		</main>
+		<script>
+			var sectionAnchors = new AnchorJS();
+			sectionAnchors.options.class = "section-anchor";
+			sectionAnchors.options.icon = "#";
+			sectionAnchors.add("main h1, main h2, main h3, main h4, main h5, main h6");
+
+			
+			
+
+		</script>
+	</body>
+</html>

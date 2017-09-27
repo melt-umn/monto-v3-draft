@@ -1,0 +1,22 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "ServiceBrokerNegotiation",
+	"description": "The Message that a Broker sends to a Service during version negotiation.",
+
+	"type": "object",
+	"properties": {
+		"monto": { "$ref": "ProtocolVersion.json#" },
+		"broker": { "$ref": "SoftwareVersion.json#" },
+		"extensions": {
+			"title": "ServiceBrokerExtensions",
+			"description": "The Service extensions supported by the Broker.",
+
+			"type": "array",
+			"minItems": 1,
+			"items": { "$ref": "NamespacedName.json#" },
+			"uniqueItems": true
+		}
+	},
+	"additionalProperties": false,
+	"required": ["monto", "broker"]
+}

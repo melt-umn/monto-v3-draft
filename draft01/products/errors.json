@@ -1,0 +1,31 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"title": "errors",
+	"description": "Syntactic or semantic errors detected in source code.",
+
+	"type": "array",
+	"items": {
+		"type": "object",
+		"properties": {
+			"message": { "type": "string" },
+			"startByte": { "$ref": "#/definitions/byteOffset" },
+			"endByte": { "$ref": "#/definitions/byteOffset" },
+			"severity": {
+				"oneOf": [
+					{ "const": "error" },
+					{ "const": "warning" },
+					{ "const": "info" }
+				]
+			}
+		},
+		"required": ["message", "startByte", "endByte"],
+		"additionalProperties": false
+	},
+
+	"definitions": {
+		"byteOffset": {
+			"type": "integer",
+			"minimum": 0
+		}
+	}
+}
